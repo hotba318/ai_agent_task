@@ -37,4 +37,3 @@ class AnalysisSettings(BaseSettings):
     groq_api_key: SecretStr | None = Field(default=None, validation_alias="GROQ_API_KEY")
     groq_model: str = "openai/gpt-oss-20b"
     groq_timeout_seconds: float = Field(default=90, gt=0)
-    task_timeout_seconds: float = Field(default=600, gt=0)

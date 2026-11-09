@@ -1,4 +1,4 @@
-"""Provisional local contracts. A2A and Group 2 mapping remain unagreed."""
+"""Group 3 local contracts; team-wide mappings remain provisional."""
 import re
 from datetime import date, datetime, timezone
 from typing import Literal

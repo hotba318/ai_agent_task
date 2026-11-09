@@ -1,4 +1,4 @@
-"""Application wiring shared by standalone CLI and version-specific A2A adapter."""
+"""Application wiring for standalone Retrieval, References and Writer agents."""
 import httpx
 
 from group3.common.analysis_schemas import ReferencesRequest, RevisionRequest, WriterRequest

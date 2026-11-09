@@ -761,5 +761,5 @@
   ],
   "title": "WriterRequest",
   "type": "object",
-  "$comment": "Provisional Group 3 contract v0.1; requires agreement with Groups 1 and 2."
+  "$comment": "Provisional Group 3 agent contract; requires team agreement."
 }

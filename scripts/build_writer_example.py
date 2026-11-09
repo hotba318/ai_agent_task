@@ -35,7 +35,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--store-folder", type=Path, required=True)
     parser.add_argument("--task-id", required=True)
-    parser.add_argument("--output", type=Path, default=Path("examples/group2-example.json"))
+    parser.add_argument("--output", type=Path, default=Path("examples/writer-input.json"))
     args = parser.parse_args()
     request = build(args.store_folder, args.task_id)
     args.output.parent.mkdir(parents=True, exist_ok=True)

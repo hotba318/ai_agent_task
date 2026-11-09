@@ -18,7 +18,7 @@ async def test_groq_real_report():
         pytest.skip("GROQ_API_KEY is not configured; no actual request was made")
     settings.writer_mode = "groq"
     settings.output_root = Path("data/groq-live-reports")
-    request = WriterRequest.model_validate_json(Path("examples/group2-example.json").read_text(encoding="utf-8"))
+    request = WriterRequest.model_validate_json(Path("examples/writer-input.json").read_text(encoding="utf-8"))
     result = await write_report(request, settings)
     assert result.mode == "groq"
     assert result.model_calls>=2

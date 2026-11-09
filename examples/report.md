@@ -1,36 +1,22 @@
 # Multi-agent large language models — Literature Review
 
-- 생성일: 2026-11-04
+- 생성일: 2026-11-09
 - 분석 대상 논문 수: 8
 - 선정 기준: 관련성 우선, 최신성 차순위
-- 보고서 ID: d56da6ecfa424626a34ee9afece8f9c6 / revision 1
+- 보고서 ID: e226b5dd03b94941902fb380ecc50a88 / revision 1
 - 검증 상태: Supervisor Evidence 검증 대기
 
 **예시 데이터 보고서: 실제 원문 발췌를 사용하는 그룹 2 인터페이스 시험용 입력입니다. 그룹 2의 실제 분석 결과가 아닙니다.**
 
-Coverage 재작성 요청: Check missing source inputs; do not invent research gaps.
+Coverage 재작성 요청: Introduction은 원문이 입증하는 범위로 제한하세요. 단일 에이전트 대비 우월성을 입증되지 않은 일반 사실로 서술하지 마세요. 제공된 Reader의 방법론/결과를 두 편 이상 원문 근거로 비교하는 문장을 추가하세요. 데이터가 없는 부분은 채우지 마세요.
 
-요청 영역: research\_gaps
+요청 영역: introduction, comparison
 
 요청 논문: 미지정
 
 ## 1. Introduction
 
-예시: 해당 섹션의 원문 발췌 — AI agents are increasingly being deployed in multi-agent systems, in which agents communicate, interact, and cooperate to complete tasks. Multi-agent systems have been shown to improve over single agents across a variety of domains and task types ( Wu et al., 2023 ; Guo et al., 2024 ; Hong et al., 2024 ; Qian et al., 2024 ; Du et al., 2024 ; Kim et al., 2024 ; Agashe et al., 2025 ) . However, comparatively little is known about their collective dynamics, such as emergent or nonlinear behavior; a [example-0-overview](#ev-443e7ea232689afe)
-
-예시: 해당 섹션의 원문 발췌 — Modern uses of large language models (LLMs) are inherently conversational and iterative, as users and agents co-construct tasks over multiple turns, revise goals, and recover from mistakes. Recent multi-turn evaluations show that single-turn prowess does not guarantee long-horizon reliability: agentic setups reveal gaps in reasoning and decision-making Liu et al. (2023) , tool use and natural-language feedback help but interact idiosyncratically with training and instruction tuning Wang et al. ( [example-1-overview](#ev-d1ee655942f90d9a)
-
-예시: 해당 섹션의 원문 발췌 — As software projects evolve rapidly, they often lead to incomplete, outdated, or inconsistent documentation. This friction slows on-boarding, complicates maintenance, and increases the risk of defects and architectural drift. To address these problems, considerable efforts have been dedicated to automated code summarization, such as identifying class stereotypes and retrieving functional keywords ( Zhu and Pan, 2019 ) . More recently, deep learning approaches have advanced this field by utilizin [example-2-overview](#ev-c2a58bd1ea3c9c7d)
-
-예시: 해당 섹션의 원문 발췌 — Recent advances in artificial intelligence (AI) have expanded its role in scientific research, enabling systems to analyze data, identify patterns, and even propose hypotheses. \[ 6 \] Yet, most of these models operate within fixed objectives and have limited ability to deliberate about scientific questions or adapt their strategies based on outcomes. Reasoning, the process of evaluating competing hypotheses and designing informative experiments, is central to genuine scientific exploration. In ma [example-3-overview](#ev-0aeaae33d206990c)
-
-예시: 해당 섹션의 원문 발췌 — As AI agents based on large language models (LLMs) take on longer-horizon, project-scale tasks with multiple specialized agents, maintaining alignment with stakeholder preferences becomes increasingly critical ( Masters et al. 2025 ) . Prior research has shown how cooperation can falter under partial observability, shifting incentives, or social feedback loops ( Leibo et al. 2017 ; Jaques et al. 2019 ; Carichon et al. 2025 , e.g.) . Recent studies on LLM-based debate and collaborative reasoning  [example-4-overview](#ev-e7bd9ffb3c80c539)
-
-예시: 해당 섹션의 원문 발췌 — Multi-Agent Systems (MAS) built from Large Language Models (LLMs) are emerging as a powerful paradigm for complex tasks. Agents in this context may be LLMs, ML models, or tools ( Ye et al., 2025 ; Wang et al., 2025b ; He and others, 2024 ; Yang et al., 2024 ; Team, 2025 ) , each taking structured inputs and producing outputs such as text, code, or tool calls. Unlike classical RL agents with compact, repetitive action spaces ( Bamford and Ovalle, 2021 ; Li et al., 2021a ; Hubert and others, 2021  [example-5-overview](#ev-4deb7f8cc9cd8aea)
-
-예시: 해당 섹션의 원문 발췌 — Large language models (LLMs) have demonstrated remarkable capabilities across a wide range of natural language tasks, driven by advances in model scaling ( Zhao et al. 2025 ) . However, the monolithic approach of scaling a single, massive model faces challenges such as hallucination ( Maynez et al. 2020 ) and catastrophic forgetting ( Kirkpatrick et al. 2017 ) , limiting its ability to achieve robust performance across all domains. In response, a multi-agent approach based on LLMs has emerged as [example-6-overview](#ev-976d0398ffd6e87b)
-
-예시: 해당 섹션의 원문 발췌 — Large Language Models (LLMs) have proven adept at generation, problem-solving, translation, and summarization, performing well on various benchmarks. An LLM’s capability to learn from vast amounts of data allows it to handle complex tasks logically and fluently. Although LLMs have demonstrated competency in handling diverse tasks, their performance is often hurt by inaccuracies ( Zhang et al., 2023 ) .<br><br>Multi-agent systems (MAS) have been explored as a solution to combat this issue. These system [example-7-overview](#ev-79b0b45bc4e09c54)
+다중 에이전트 LLM은 협업과 상호작용을 통해 복잡한 과제를 해결한다. [example-0-overview](#ev-443e7ea232689afe) [example-1-overview](#ev-d1ee655942f90d9a) [example-2-overview](#ev-c2a58bd1ea3c9c7d) [example-3-overview](#ev-0aeaae33d206990c) [example-4-overview](#ev-e7bd9ffb3c80c539) [example-5-overview](#ev-4deb7f8cc9cd8aea) [example-6-overview](#ev-976d0398ffd6e87b) [example-7-overview](#ev-79b0b45bc4e09c54)
 
 ## 2. Overview of Selected Papers
 
@@ -38,51 +24,65 @@ Coverage 재작성 요청: Check missing source inputs; do not invent research g
 
 [arxiv:2609.38327](https://arxiv.org/abs/2609.38327v2) / 최초 제출 2026-09-29
 
-예시: 해당 섹션의 원문 발췌 — AI agents are increasingly being deployed in multi-agent systems, in which agents communicate, interact, and cooperate to complete tasks. Multi-agent systems have been shown to improve over single agents across a variety of domains and task types ( Wu et al., 2023 ; Guo et al., 2024 ; Hong et al., 2024 ; Qian et al., 2024 ; Du et al., 2024 ; Kim et al., 2024 ; Agashe et al., 2025 ) . However, comparatively little is known about their collective dynamics, such as emergent or nonlinear behavior; a [example-0-overview](#ev-443e7ea232689afe)
+AI 에이전트가 다중 에이전트 시스템에 배치되며, 협업이 단일 에이전트보다 우수하다. [example-0-overview](#ev-443e7ea232689afe)
 
 ### Delay-of-Gratification as a Multi-Agent Survival Micro-benchmark for Long-Horizon LLMs: Social Exposure, Personas, and Tool Use Budgets
 
 [arxiv:2609.29509](https://arxiv.org/abs/2609.29509v1) / 최초 제출 2026-08-26
 
-예시: 해당 섹션의 원문 발췌 — Modern uses of large language models (LLMs) are inherently conversational and iterative, as users and agents co-construct tasks over multiple turns, revise goals, and recover from mistakes. Recent multi-turn evaluations show that single-turn prowess does not guarantee long-horizon reliability: agentic setups reveal gaps in reasoning and decision-making Liu et al. (2023) , tool use and natural-language feedback help but interact idiosyncratically with training and instruction tuning Wang et al. ( [example-1-overview](#ev-d1ee655942f90d9a)
+LLM은 대화형이며, 단일 턴 성능이 장기 신뢰성을 보장하지 않는다. [example-1-overview](#ev-d1ee655942f90d9a)
+
+요인 설계는 사회적 맥락, 쾌락 동기, 연령 페르소나, 도구 사용 정책을 교차한다. [example-1-methods](#ev-dd945fc75d99c76c)
+
+실험에서 19,200 에이전트 궤적을 수집했다. [example-1-results](#ev-4937223dfb697723)
 
 ### Agent4cs: A Multi-agent System for Code Summarization in Large Hierarchical Codebases
 
 [arxiv:2607.01425](https://arxiv.org/abs/2607.01425v2) / 최초 제출 2026-07-01
 
-예시: 해당 섹션의 원문 발췌 — As software projects evolve rapidly, they often lead to incomplete, outdated, or inconsistent documentation. This friction slows on-boarding, complicates maintenance, and increases the risk of defects and architectural drift. To address these problems, considerable efforts have been dedicated to automated code summarization, such as identifying class stereotypes and retrieving functional keywords ( Zhu and Pan, 2019 ) . More recently, deep learning approaches have advanced this field by utilizin [example-2-overview](#ev-c2a58bd1ea3c9c7d)
+코드 요약은 빠르게 진화하는 소프트웨어 프로젝트에서 문서 문제를 해결한다. [example-2-overview](#ev-c2a58bd1ea3c9c7d)
+
+코드 이해 평가를 위해 CodeJudge-Eval과 CODERPE가 사용된다. [example-2-results](#ev-3441ac8656296453)
 
 ### Hierarchical Multi-agent Large Language Model Reasoning for Autonomous Functional Materials Discovery
 
 [arxiv:2512.13930](https://arxiv.org/abs/2512.13930v1) / 최초 제출 2025-12-15
 
-예시: 해당 섹션의 원문 발췌 — Recent advances in artificial intelligence (AI) have expanded its role in scientific research, enabling systems to analyze data, identify patterns, and even propose hypotheses. \[ 6 \] Yet, most of these models operate within fixed objectives and have limited ability to deliberate about scientific questions or adapt their strategies based on outcomes. Reasoning, the process of evaluating competing hypotheses and designing informative experiments, is central to genuine scientific exploration. In ma [example-3-overview](#ev-0aeaae33d206990c)
+MASTER 프레임워크는 LLM 추론과 전자 구조 시뮬레이션을 결합한다. [example-3-overview](#ev-0aeaae33d206990c) [example-3-methods](#ev-f3df995d06e5e870)
 
 ### ARCANE: A Multi-Agent Framework for Interpretable and Configurable Alignment
 
 [arxiv:2512.06196](https://arxiv.org/abs/2512.06196v1) / 최초 제출 2025-12-05
 
-예시: 해당 섹션의 원문 발췌 — As AI agents based on large language models (LLMs) take on longer-horizon, project-scale tasks with multiple specialized agents, maintaining alignment with stakeholder preferences becomes increasingly critical ( Masters et al. 2025 ) . Prior research has shown how cooperation can falter under partial observability, shifting incentives, or social feedback loops ( Leibo et al. 2017 ; Jaques et al. 2019 ; Carichon et al. 2025 , e.g.) . Recent studies on LLM-based debate and collaborative reasoning  [example-4-overview](#ev-e7bd9ffb3c80c539)
+ARCANE은 랭킹 규칙을 학습해 작업자 효율을 높인다. [example-4-overview](#ev-e7bd9ffb3c80c539) [example-4-methods](#ev-0bdaba3552468ab5)
+
+ARCANE의 실험은 유틸리티 향상, 신뢰성, 해석 가능성을 평가한다. [example-4-results](#ev-874afc84dd2a0e1b)
 
 ### Who Gets the Reward & Who Gets the Blame? Evaluation-Aligned Training Signals for Multi-LLM Agents
 
 [arxiv:2511.10687](https://arxiv.org/abs/2511.10687v3) / 최초 제출 2025-11-11
 
-예시: 해당 섹션의 원문 발췌 — Multi-Agent Systems (MAS) built from Large Language Models (LLMs) are emerging as a powerful paradigm for complex tasks. Agents in this context may be LLMs, ML models, or tools ( Ye et al., 2025 ; Wang et al., 2025b ; He and others, 2024 ; Yang et al., 2024 ; Team, 2025 ) , each taking structured inputs and producing outputs such as text, code, or tool calls. Unlike classical RL agents with compact, repetitive action spaces ( Bamford and Ovalle, 2021 ; Li et al., 2021a ; Hubert and others, 2021  [example-5-overview](#ev-4deb7f8cc9cd8aea)
+LLM 기반 MAS는 복잡한 작업을 수행한다. [example-5-overview](#ev-4deb7f8cc9cd8aea)
+
+신용 도용 방지를 위해 샤플리 값과 PRM 감독을 사용한다. [example-5-limitations](#ev-0328298d2a7823ae)
 
 ### The Geometry of Dialogue: Graphing Language Models to Reveal Synergistic Teams for Multi-Agent Collaboration
 
 [arxiv:2510.26352](https://arxiv.org/abs/2510.26352v2) / 최초 제출 2025-10-30
 
-예시: 해당 섹션의 원문 발췌 — Large language models (LLMs) have demonstrated remarkable capabilities across a wide range of natural language tasks, driven by advances in model scaling ( Zhao et al. 2025 ) . However, the monolithic approach of scaling a single, massive model faces challenges such as hallucination ( Maynez et al. 2020 ) and catastrophic forgetting ( Kirkpatrick et al. 2017 ) , limiting its ability to achieve robust performance across all domains. In response, a multi-agent approach based on LLMs has emerged as [example-6-overview](#ev-976d0398ffd6e87b)
+LLM 그래프는 모델 특성을 클러스터링한다. [example-6-overview](#ev-976d0398ffd6e87b) [example-6-results](#ev-955e4bf3d85eccd8)
 
 ### SMAGDi: Socratic Multi Agent Interaction Graph Distillation for Efficient High Accuracy Reasoning
 
 [arxiv:2511.05528](https://arxiv.org/abs/2511.05528v1) / 최초 제출 2025-10-29
 
-예시: 해당 섹션의 원문 발췌 — Large Language Models (LLMs) have proven adept at generation, problem-solving, translation, and summarization, performing well on various benchmarks. An LLM’s capability to learn from vast amounts of data allows it to handle complex tasks logically and fluently. Although LLMs have demonstrated competency in handling diverse tasks, their performance is often hurt by inaccuracies ( Zhang et al., 2023 ) .<br><br>Multi-agent systems (MAS) have been explored as a solution to combat this issue. These system [example-7-overview](#ev-79b0b45bc4e09c54)
+SMAGDi는 도메인 인격을 시뮬레이션해 추론 효율을 개선한다. [example-7-overview](#ev-79b0b45bc4e09c54) [example-7-methods](#ev-c0ad4ed279111d71)
 
 ## 3. Comparative Analysis
+
+ARCANE은 랭킹 규칙을 학습해 작업자 효율을 높이는 반면, SMAGDi는 도메인 인격을 시뮬레이션해 추론 효율을 개선한다. [example-4-methods](#ev-0bdaba3552468ab5) [example-7-methods](#ev-c0ad4ed279111d71)
+
+아래 표는 Reader 입력과 인용 위치를 보존한 자료이며, 원문 함의는 Supervisor 검증 대기 상태입니다.
 
 | 논문 | 방법론 | 데이터셋 | 주요 결과 |
 |---|---|---|---|
@@ -107,19 +107,23 @@ Coverage 재작성 요청: Check missing source inputs; do not invent research g
 
 ## 5. Connections and Conflicts
 
+제공된 근거로 작성·검토를 통과한 문장이 없습니다.
+
 연결/상충 분석 입력이 없습니다. 결과를 추정하지 않습니다.
 
 ## 6. Research Gaps
 
-제공된 근거가 없습니다.
+제공된 근거로 작성·검토를 통과한 문장이 없습니다.
 
 ## 7. Limitations
 
-예시: 해당 섹션의 원문 발췌 — Preventing credit hoarding. A key risk in cooperative multi-agent systems is that one agent might dominate the workflow, suppressing others to inflate its own marginal credit. Our framework mitigates this through two mechanisms. First, Shapley values enforce efficiency and symmetry, ensuring that duplicated or suppressive behavior yields little marginal gain. Second, message-level PRM supervision distributes an agent’s credit across its responses, so redundant or uninformative steps receive near [example-5-limitations](#ev-0328298d2a7823ae)
+신용 도용 방지를 위해 샤플리 값과 PRM 감독을 사용한다. [example-5-limitations](#ev-0328298d2a7823ae)
 
-예시: 해당 섹션의 원문 발췌 — Training Data Due to computational constraints, we did not train our models on the full auxiliary train split of MMLU. Further testing will be needed to confirm that SMAGDi will perform better than other models if trained on all data.<br><br>Large-Scale Setups Since SMAGDi was tested on lightweight models, we lack proof of its scalability to larger environments. In application, alternatives that provide similar results with minimal computational costs would prove to be more efficient.<br><br>Dynamic Weighti [example-7-limitations](#ev-e9f41b2ba234165c)
+SMAGDi는 대규모 환경에서의 확장성을 입증하지 못했다. [example-7-limitations](#ev-e9f41b2ba234165c)
 
 구조·인용 위치 검증은 사실 검증을 대체하지 않습니다. 주장의 원문 함의와 상충 여부는 Supervisor/Reader가 확인해야 합니다.
+
+모델 근거 검토에서 1개, 프로그램 수치 검사에서 0개 문장을 보류했습니다. 통과 문장도 최종 사실 검증 완료를 의미하지 않습니다.
 
 미충족 영역:
 
@@ -146,6 +150,9 @@ Coverage 재작성 요청: Check missing source inputs; do not invent research g
 - results:arxiv:2511.05528
 - connections
 - research\_gaps
+- draft:connections
+- draft:research\_gaps
+- support\_review:stmt-2609-38327-2
 
 ## 8. References
 

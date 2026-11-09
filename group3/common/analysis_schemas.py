@@ -1,4 +1,4 @@
-"""Provisional Group 1/2 contracts; replace at adapter boundary after team agreement."""
+"""Input/output contracts for Group 3 agents; subject to team agreement."""
 from typing import Literal
 
 from pydantic import Field, model_validator
