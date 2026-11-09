@@ -1,0 +1,129 @@
+{
+  "$defs": {
+    "Failure": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1",
+          "default": "0.1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "paper_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Paper Id"
+        },
+        "stage": {
+          "title": "Stage",
+          "type": "string"
+        },
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "detail": {
+          "title": "Detail",
+          "type": "string"
+        }
+      },
+      "required": [
+        "stage",
+        "code",
+        "detail"
+      ],
+      "title": "Failure",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.1",
+      "default": "0.1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "task_id": {
+      "title": "Task Id",
+      "type": "string"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "completed",
+        "insufficient_papers",
+        "failed"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "requested_count": {
+      "title": "Requested Count",
+      "type": "integer"
+    },
+    "selected_count": {
+      "title": "Selected Count",
+      "type": "integer"
+    },
+    "paper_store_uri": {
+      "title": "Paper Store Uri",
+      "type": "string"
+    },
+    "paper_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Paper Ids",
+      "type": "array"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    },
+    "failures": {
+      "items": {
+        "$ref": "#/$defs/Failure"
+      },
+      "title": "Failures",
+      "type": "array"
+    },
+    "decisions_path": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Decisions Path"
+    }
+  },
+  "required": [
+    "task_id",
+    "run_id",
+    "status",
+    "requested_count",
+    "selected_count",
+    "paper_store_uri",
+    "paper_ids"
+  ],
+  "title": "RetrievalResult",
+  "type": "object",
+  "$comment": "Provisional Group 3 contract v0.1; requires agreement with Groups 1 and 2."
+}

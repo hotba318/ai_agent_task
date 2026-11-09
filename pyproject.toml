@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "group3-paper-agents"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = ["httpx>=0.28,<0.29", "lxml>=5.3,<7", "pydantic>=2.11.3,<3", "pydantic-settings>=2.7,<3", "a2a-sdk[http-server]==0.3.22", "uvicorn>=0.34,<1"]
+
+[project.optional-dependencies]
+test = ["pytest>=8.3,<10", "pytest-asyncio>=0.25,<2"]
+
+[project.scripts]
+group3-retrieve = "group3.cli:main"
+group3-analyze = "group3.analysis_cli:main"
+group3-serve = "group3.a2a.server:main"
+group3-integrate = "group3.integration.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["group3*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+markers = ["live: external service integration; opt in with RUN_LIVE=1"]

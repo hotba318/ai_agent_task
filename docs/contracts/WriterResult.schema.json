@@ -1,0 +1,130 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.1",
+      "default": "0.1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "task_id": {
+      "title": "Task Id",
+      "type": "string"
+    },
+    "report_id": {
+      "title": "Report Id",
+      "type": "string"
+    },
+    "revision": {
+      "maximum": 1,
+      "minimum": 0,
+      "title": "Revision",
+      "type": "integer"
+    },
+    "status": {
+      "enum": [
+        "needs_review",
+        "coverage_incomplete"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "markdown_path": {
+      "title": "Markdown Path",
+      "type": "string"
+    },
+    "evidence_path": {
+      "title": "Evidence Path",
+      "type": "string"
+    },
+    "markdown": {
+      "title": "Markdown",
+      "type": "string"
+    },
+    "missing_coverage": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Missing Coverage",
+      "type": "array"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    },
+    "mode": {
+      "enum": [
+        "extractive",
+        "groq"
+      ],
+      "title": "Mode",
+      "type": "string"
+    },
+    "evidence_verified": {
+      "const": false,
+      "default": false,
+      "title": "Evidence Verified",
+      "type": "boolean"
+    },
+    "draft_path": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Draft Path"
+    },
+    "review_path": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Review Path"
+    },
+    "decisions_path": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Decisions Path"
+    },
+    "model_calls": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Model Calls",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "task_id",
+    "report_id",
+    "revision",
+    "status",
+    "markdown_path",
+    "evidence_path",
+    "markdown",
+    "missing_coverage",
+    "warnings",
+    "mode"
+  ],
+  "title": "WriterResult",
+  "type": "object",
+  "$comment": "Provisional Group 3 contract v0.1; requires agreement with Groups 1 and 2."
+}
