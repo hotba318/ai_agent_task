@@ -1,0 +1,843 @@
+{
+  "$defs": {
+    "Claim": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1",
+          "default": "0.1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "claim_id": {
+          "minLength": 1,
+          "title": "Claim Id",
+          "type": "string"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "claim_id",
+        "text",
+        "evidence_ids"
+      ],
+      "title": "Claim",
+      "type": "object"
+    },
+    "CommonReference": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1",
+          "default": "0.1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "reference_id": {
+          "title": "Reference Id",
+          "type": "string"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "doi": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Doi"
+        },
+        "arxiv_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Arxiv Id"
+        },
+        "cited_by_count": {
+          "minimum": 2,
+          "title": "Cited By Count",
+          "type": "integer"
+        },
+        "cited_by_paper_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Cited By Paper Ids",
+          "type": "array"
+        },
+        "occurrences": {
+          "items": {
+            "$ref": "#/$defs/ReferenceOccurrence"
+          },
+          "title": "Occurrences",
+          "type": "array"
+        }
+      },
+      "required": [
+        "reference_id",
+        "cited_by_count",
+        "cited_by_paper_ids",
+        "occurrences"
+      ],
+      "title": "CommonReference",
+      "type": "object"
+    },
+    "Connection": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1",
+          "default": "0.1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "connection_id": {
+          "title": "Connection Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "similarity",
+            "difference",
+            "conflict"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "claims": {
+          "items": {
+            "$ref": "#/$defs/Claim"
+          },
+          "minItems": 1,
+          "title": "Claims",
+          "type": "array"
+        }
+      },
+      "required": [
+        "connection_id",
+        "kind",
+        "claims"
+      ],
+      "title": "Connection",
+      "type": "object"
+    },
+    "CoverageFeedback": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1",
+          "default": "0.1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "missing_sections": {
+          "items": {
+            "enum": [
+              "introduction",
+              "overview",
+              "comparison",
+              "common_references",
+              "connections",
+              "research_gaps",
+              "limitations",
+              "references"
+            ],
+            "type": "string"
+          },
+          "title": "Missing Sections",
+          "type": "array"
+        },
+        "missing_paper_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Missing Paper Ids",
+          "type": "array"
+        },
+        "note": {
+          "default": "",
+          "title": "Note",
+          "type": "string"
+        }
+      },
+      "title": "CoverageFeedback",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1",
+          "default": "0.1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "evidence_id": {
+          "minLength": 1,
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "paper_id": {
+          "title": "Paper Id",
+          "type": "string"
+        },
+        "section_id": {
+          "title": "Section Id",
+          "type": "string"
+        },
+        "quote": {
+          "minLength": 1,
+          "title": "Quote",
+          "type": "string"
+        }
+      },
+      "required": [
+        "evidence_id",
+        "paper_id",
+        "section_id",
+        "quote"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "PaperDocument": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1",
+          "default": "0.1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "paper_id": {
+          "title": "Paper Id",
+          "type": "string"
+        },
+        "version_id": {
+          "title": "Version Id",
+          "type": "string"
+        },
+        "title": {
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "authors": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Authors",
+          "type": "array"
+        },
+        "abstract": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Abstract"
+        },
+        "submitted_date": {
+          "format": "date",
+          "title": "Submitted Date",
+          "type": "string"
+        },
+        "updated_date": {
+          "format": "date",
+          "title": "Updated Date",
+          "type": "string"
+        },
+        "source_url": {
+          "format": "uri",
+          "maxLength": 2083,
+          "minLength": 1,
+          "title": "Source Url",
+          "type": "string"
+        },
+        "html_url": {
+          "format": "uri",
+          "maxLength": 2083,
+          "minLength": 1,
+          "title": "Html Url",
+          "type": "string"
+        },
+        "pdf_url": {
+          "format": "uri",
+          "maxLength": 2083,
+          "minLength": 1,
+          "title": "Pdf Url",
+          "type": "string"
+        },
+        "metadata_source": {
+          "default": "arxiv_api",
+          "enum": [
+            "arxiv_api",
+            "datacite"
+          ],
+          "title": "Metadata Source",
+          "type": "string"
+        },
+        "metadata_url": {
+          "anyOf": [
+            {
+              "format": "uri",
+              "maxLength": 2083,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Metadata Url"
+        },
+        "parse_method": {
+          "enum": [
+            "arxiv_html",
+            "grobid_pdf"
+          ],
+          "title": "Parse Method",
+          "type": "string"
+        },
+        "raw_document_path": {
+          "title": "Raw Document Path",
+          "type": "string"
+        },
+        "parsed_document_path": {
+          "title": "Parsed Document Path",
+          "type": "string"
+        },
+        "raw_sha256": {
+          "title": "Raw Sha256",
+          "type": "string"
+        },
+        "sections": {
+          "items": {
+            "$ref": "#/$defs/Section"
+          },
+          "minItems": 1,
+          "title": "Sections",
+          "type": "array"
+        },
+        "references": {
+          "items": {
+            "$ref": "#/$defs/Reference"
+          },
+          "title": "References",
+          "type": "array"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        },
+        "retrieved_at": {
+          "format": "date-time",
+          "title": "Retrieved At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "paper_id",
+        "version_id",
+        "title",
+        "authors",
+        "submitted_date",
+        "updated_date",
+        "source_url",
+        "html_url",
+        "pdf_url",
+        "parse_method",
+        "raw_document_path",
+        "parsed_document_path",
+        "raw_sha256",
+        "sections",
+        "references"
+      ],
+      "title": "PaperDocument",
+      "type": "object"
+    },
+    "PossibleDuplicate": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1",
+          "default": "0.1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "left": {
+          "$ref": "#/$defs/ReferenceOccurrence"
+        },
+        "right": {
+          "$ref": "#/$defs/ReferenceOccurrence"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "left",
+        "right",
+        "reason"
+      ],
+      "title": "PossibleDuplicate",
+      "type": "object"
+    },
+    "ReaderResult": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1",
+          "default": "0.1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "paper_id": {
+          "title": "Paper Id",
+          "type": "string"
+        },
+        "overview": {
+          "items": {
+            "$ref": "#/$defs/Claim"
+          },
+          "title": "Overview",
+          "type": "array"
+        },
+        "methods": {
+          "items": {
+            "$ref": "#/$defs/Claim"
+          },
+          "title": "Methods",
+          "type": "array"
+        },
+        "datasets": {
+          "items": {
+            "$ref": "#/$defs/Claim"
+          },
+          "title": "Datasets",
+          "type": "array"
+        },
+        "results": {
+          "items": {
+            "$ref": "#/$defs/Claim"
+          },
+          "title": "Results",
+          "type": "array"
+        },
+        "limitations": {
+          "items": {
+            "$ref": "#/$defs/Claim"
+          },
+          "title": "Limitations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "paper_id"
+      ],
+      "title": "ReaderResult",
+      "type": "object"
+    },
+    "Reference": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1",
+          "default": "0.1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "reference_id": {
+          "title": "Reference Id",
+          "type": "string"
+        },
+        "raw_text": {
+          "minLength": 1,
+          "title": "Raw Text",
+          "type": "string"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "doi": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Doi"
+        },
+        "arxiv_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Arxiv Id"
+        },
+        "authors": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Authors",
+          "type": "array"
+        },
+        "year": {
+          "anyOf": [
+            {
+              "maximum": 3000,
+              "minimum": 1500,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Year"
+        },
+        "source_locator": {
+          "title": "Source Locator",
+          "type": "string"
+        }
+      },
+      "required": [
+        "reference_id",
+        "raw_text",
+        "source_locator"
+      ],
+      "title": "Reference",
+      "type": "object"
+    },
+    "ReferenceOccurrence": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1",
+          "default": "0.1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "paper_id": {
+          "title": "Paper Id",
+          "type": "string"
+        },
+        "reference_id": {
+          "title": "Reference Id",
+          "type": "string"
+        },
+        "source_locator": {
+          "title": "Source Locator",
+          "type": "string"
+        },
+        "raw_text": {
+          "title": "Raw Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "paper_id",
+        "reference_id",
+        "source_locator",
+        "raw_text"
+      ],
+      "title": "ReferenceOccurrence",
+      "type": "object"
+    },
+    "ReferencesResult": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1",
+          "default": "0.1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "task_id": {
+          "title": "Task Id",
+          "type": "string"
+        },
+        "paper_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Paper Ids",
+          "type": "array"
+        },
+        "common_references": {
+          "items": {
+            "$ref": "#/$defs/CommonReference"
+          },
+          "title": "Common References",
+          "type": "array"
+        },
+        "possible_duplicates": {
+          "items": {
+            "$ref": "#/$defs/PossibleDuplicate"
+          },
+          "title": "Possible Duplicates",
+          "type": "array"
+        },
+        "ranking_basis": {
+          "const": "distinct_selected_papers_citing_reference",
+          "default": "distinct_selected_papers_citing_reference",
+          "title": "Ranking Basis",
+          "type": "string"
+        },
+        "minimum_citing_papers": {
+          "default": 2,
+          "minimum": 2,
+          "title": "Minimum Citing Papers",
+          "type": "integer"
+        },
+        "warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        },
+        "review_required": {
+          "default": false,
+          "title": "Review Required",
+          "type": "boolean"
+        },
+        "decisions": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Decisions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "task_id",
+        "paper_ids",
+        "common_references"
+      ],
+      "title": "ReferencesResult",
+      "type": "object"
+    },
+    "Section": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1",
+          "default": "0.1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "section_id": {
+          "title": "Section Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "source_locator": {
+          "title": "Source Locator",
+          "type": "string"
+        },
+        "source_url": {
+          "format": "uri",
+          "maxLength": 2083,
+          "minLength": 1,
+          "title": "Source Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "section_id",
+        "title",
+        "text",
+        "source_locator",
+        "source_url"
+      ],
+      "title": "Section",
+      "type": "object"
+    },
+    "WriterRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1",
+          "default": "0.1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "task_id": {
+          "pattern": "^[A-Za-z0-9_-]{1,100}$",
+          "title": "Task Id",
+          "type": "string"
+        },
+        "topic": {
+          "minLength": 1,
+          "title": "Topic",
+          "type": "string"
+        },
+        "papers": {
+          "items": {
+            "$ref": "#/$defs/PaperDocument"
+          },
+          "minItems": 1,
+          "title": "Papers",
+          "type": "array"
+        },
+        "reader_results": {
+          "items": {
+            "$ref": "#/$defs/ReaderResult"
+          },
+          "title": "Reader Results",
+          "type": "array"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "common_references": {
+          "$ref": "#/$defs/ReferencesResult"
+        },
+        "connections": {
+          "items": {
+            "$ref": "#/$defs/Connection"
+          },
+          "title": "Connections",
+          "type": "array"
+        },
+        "research_gaps": {
+          "items": {
+            "$ref": "#/$defs/Claim"
+          },
+          "title": "Research Gaps",
+          "type": "array"
+        },
+        "output_format": {
+          "const": "markdown",
+          "default": "markdown",
+          "title": "Output Format",
+          "type": "string"
+        },
+        "data_provenance": {
+          "default": "group2",
+          "enum": [
+            "group2",
+            "example_fixture"
+          ],
+          "title": "Data Provenance",
+          "type": "string"
+        }
+      },
+      "required": [
+        "task_id",
+        "topic",
+        "papers",
+        "common_references"
+      ],
+      "title": "WriterRequest",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.1",
+      "default": "0.1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "report_id": {
+      "pattern": "^[0-9a-f]{32}$",
+      "title": "Report Id",
+      "type": "string"
+    },
+    "feedback": {
+      "$ref": "#/$defs/CoverageFeedback"
+    },
+    "updated_input": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/WriterRequest"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "report_id",
+    "feedback"
+  ],
+  "title": "RevisionRequest",
+  "type": "object",
+  "$comment": "Provisional Group 3 contract v0.1; requires agreement with Groups 1 and 2."
+}

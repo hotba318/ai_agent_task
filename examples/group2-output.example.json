@@ -1,0 +1,389 @@
+{
+  "schema_version": "0.1",
+  "task_id": "a2a-live",
+  "run_id": "c2fec30f86ac4058a98d385e031e1149",
+  "paper_ids": [],
+  "reader_results": [
+    {
+      "schema_version": "0.1",
+      "paper_id": "arxiv:2609.38327",
+      "overview": [
+        {
+          "schema_version": "0.1",
+          "claim_id": "claim-example-0-overview",
+          "text": "예시: 해당 섹션의 원문 발췌 — AI agents are increasingly being deployed in multi-agent systems, in which agents communicate, interact, and cooperate to complete tasks. Multi-agent systems have been shown to improve over single agents across a variety of domains and task types ( Wu et al., 2023 ; Guo et al., 2024 ; Hong et al., 2024 ; Qian et al., 2024 ; Du et al., 2024 ; Kim et al., 2024 ; Agashe et al., 2025 ) . However, comparatively little is known about their collective dynamics, such as emergent or nonlinear behavior; a",
+          "evidence_ids": [
+            "example-0-overview"
+          ]
+        }
+      ],
+      "methods": [],
+      "datasets": [],
+      "results": [
+        {
+          "schema_version": "0.1",
+          "claim_id": "claim-example-0-results",
+          "text": "예시: 해당 섹션의 원문 발췌 — We theoretically derive d c d_{c} for all four search task classes. We show that needle and chain search tasks will never reach a phase transition in communication degree (Section 3.1 ), whereas d c d_{c} exists for tree and factorizable search (Section 3.2 ).",
+          "evidence_ids": [
+            "example-0-results"
+          ]
+        }
+      ],
+      "limitations": []
+    },
+    {
+      "schema_version": "0.1",
+      "paper_id": "arxiv:2609.29509",
+      "overview": [
+        {
+          "schema_version": "0.1",
+          "claim_id": "claim-example-1-overview",
+          "text": "예시: 해당 섹션의 원문 발췌 — Modern uses of large language models (LLMs) are inherently conversational and iterative, as users and agents co-construct tasks over multiple turns, revise goals, and recover from mistakes. Recent multi-turn evaluations show that single-turn prowess does not guarantee long-horizon reliability: agentic setups reveal gaps in reasoning and decision-making Liu et al. (2023) , tool use and natural-language feedback help but interact idiosyncratically with training and instruction tuning Wang et al. (",
+          "evidence_ids": [
+            "example-1-overview"
+          ]
+        }
+      ],
+      "methods": [
+        {
+          "schema_version": "0.1",
+          "claim_id": "claim-example-1-methods",
+          "text": "예시: 해당 섹션의 원문 발췌 — Experimental Factors. We implement a factorial design that crosses several core dimensions, with independent randomization per experimental cell and replicated trials: social context: isolated vs. broadcast; hedonic drive: crave vs. like vs. neutral; age persona: child vs. adult vs. senior; tool-use policy: MUST vs. MAY. Optional toggles in the run plan include budget visibility (visible vs. hidden). The default total time is set to max_steps = 20 (minutes), with a fixed answer format and final ",
+          "evidence_ids": [
+            "example-1-methods"
+          ]
+        }
+      ],
+      "datasets": [],
+      "results": [
+        {
+          "schema_version": "0.1",
+          "claim_id": "claim-example-1-results",
+          "text": "예시: 해당 섹션의 원문 발췌 — Sample and Data Quality. We ran 19,200 agent trajectories across 64 experimental cells (6 agents per cell, with a time horizon of T = 19 T=19 ). The data quality was high, with 99.9% of trajectories being valid and only 0.1% invalid. The aggregate behavior of agents shows a strong impulse to eat in the first minute, followed by a long tail of waiting. Key metrics include an initial eat rate ≈ 0.125 \\approx 0.125 , a total eat rate ≈ 0.241 \\approx 0.241 , and a winners rate ≈ 0.759 \\approx 0.759 ",
+          "evidence_ids": [
+            "example-1-results"
+          ]
+        }
+      ],
+      "limitations": []
+    },
+    {
+      "schema_version": "0.1",
+      "paper_id": "arxiv:2607.01425",
+      "overview": [
+        {
+          "schema_version": "0.1",
+          "claim_id": "claim-example-2-overview",
+          "text": "예시: 해당 섹션의 원문 발췌 — As software projects evolve rapidly, they often lead to incomplete, outdated, or inconsistent documentation. This friction slows on-boarding, complicates maintenance, and increases the risk of defects and architectural drift. To address these problems, considerable efforts have been dedicated to automated code summarization, such as identifying class stereotypes and retrieving functional keywords ( Zhu and Pan, 2019 ) . More recently, deep learning approaches have advanced this field by utilizin",
+          "evidence_ids": [
+            "example-2-overview"
+          ]
+        }
+      ],
+      "methods": [],
+      "datasets": [],
+      "results": [
+        {
+          "schema_version": "0.1",
+          "claim_id": "claim-example-2-results",
+          "text": "예시: 해당 섹션의 원문 발췌 — Beyond generating summaries, recent research has explored leveraging language models as automated evaluators to judge the quality of code understanding and summarization. CodeJudge-Eval establishes a benchmark for measuring LLMs’ code understanding abilities through their performance in judging code solution correctness ( Zhao et al., 2025 ) , while CODERPE integrates multi-role prompts into LLMs to automatically evaluate code summaries across coherence, fluency, and relevance ( Wu et al., 2025 ",
+          "evidence_ids": [
+            "example-2-results"
+          ]
+        }
+      ],
+      "limitations": []
+    },
+    {
+      "schema_version": "0.1",
+      "paper_id": "arxiv:2512.13930",
+      "overview": [
+        {
+          "schema_version": "0.1",
+          "claim_id": "claim-example-3-overview",
+          "text": "예시: 해당 섹션의 원문 발췌 — Recent advances in artificial intelligence (AI) have expanded its role in scientific research, enabling systems to analyze data, identify patterns, and even propose hypotheses. [ 6 ] Yet, most of these models operate within fixed objectives and have limited ability to deliberate about scientific questions or adapt their strategies based on outcomes. Reasoning, the process of evaluating competing hypotheses and designing informative experiments, is central to genuine scientific exploration. In ma",
+          "evidence_ids": [
+            "example-3-overview"
+          ]
+        }
+      ],
+      "methods": [
+        {
+          "schema_version": "0.1",
+          "claim_id": "claim-example-3-methods",
+          "text": "예시: 해당 섹션의 원문 발췌 — The MASTER framework integrates LLM reasoning with autonomous electronic-structure simulation in a closed loop that emulates the operation of a scientific research team (Fig. 1 a). The system is organized into three tightly coupled yet functionally distinct layers. The design layer comprises a team of LLM agents that use natural language to formulate hypotheses and deliberate, individually or collectively, on which material to evaluate next based on the accumulated simulation history. Once a can",
+          "evidence_ids": [
+            "example-3-methods"
+          ]
+        }
+      ],
+      "datasets": [],
+      "results": [],
+      "limitations": []
+    },
+    {
+      "schema_version": "0.1",
+      "paper_id": "arxiv:2512.06196",
+      "overview": [
+        {
+          "schema_version": "0.1",
+          "claim_id": "claim-example-4-overview",
+          "text": "예시: 해당 섹션의 원문 발췌 — As AI agents based on large language models (LLMs) take on longer-horizon, project-scale tasks with multiple specialized agents, maintaining alignment with stakeholder preferences becomes increasingly critical ( Masters et al. 2025 ) . Prior research has shown how cooperation can falter under partial observability, shifting incentives, or social feedback loops ( Leibo et al. 2017 ; Jaques et al. 2019 ; Carichon et al. 2025 , e.g.) . Recent studies on LLM-based debate and collaborative reasoning ",
+          "evidence_ids": [
+            "example-4-overview"
+          ]
+        }
+      ],
+      "methods": [
+        {
+          "schema_version": "0.1",
+          "claim_id": "claim-example-4-methods",
+          "text": "예시: 해당 섹션의 원문 발췌 — ARCANE is a framework for learning structured, interpretable proxy utilities that align workers’ behavior with stakeholder preferences. ARCANE instantiates the abstract alignment setting from Section 3 by representing the manager’s coordination signal as a rubric : a decomposable, verifiable, and dynamically configurable approximation of the stakeholder’s true utility function U ∗ ​ ( y ∣ x ) U^{*}(y\\mid x) .\n\nThe core idea is to have our manager M learn a rubric decomposer 𝔇 ϕ \\mathfrak{D}_{\\ph",
+          "evidence_ids": [
+            "example-4-methods"
+          ]
+        }
+      ],
+      "datasets": [],
+      "results": [
+        {
+          "schema_version": "0.1",
+          "claim_id": "claim-example-4-results",
+          "text": "예시: 해당 섹션의 원문 발췌 — Our experiments aim to answer three research questions:\n\nRQ1 (Usefulness): Does guiding the worker team with learned rubrics increase the utility of their outputs versus unguided generation?\n\nRQ2 (Faithfulness): Does the manager agent learn to rank candidates at test time in a manner consistent with the rankings computed from the stakeholder utility U ⋆ U^{\\star} ?\n\nRQ3 (Interpretability & Efficiency): Are the rubrics generated by the manager agent compact, legible, and practical to verify?",
+          "evidence_ids": [
+            "example-4-results"
+          ]
+        }
+      ],
+      "limitations": []
+    },
+    {
+      "schema_version": "0.1",
+      "paper_id": "arxiv:2511.10687",
+      "overview": [
+        {
+          "schema_version": "0.1",
+          "claim_id": "claim-example-5-overview",
+          "text": "예시: 해당 섹션의 원문 발췌 — Multi-Agent Systems (MAS) built from Large Language Models (LLMs) are emerging as a powerful paradigm for complex tasks. Agents in this context may be LLMs, ML models, or tools ( Ye et al., 2025 ; Wang et al., 2025b ; He and others, 2024 ; Yang et al., 2024 ; Team, 2025 ) , each taking structured inputs and producing outputs such as text, code, or tool calls. Unlike classical RL agents with compact, repetitive action spaces ( Bamford and Ovalle, 2021 ; Li et al., 2021a ; Hubert and others, 2021 ",
+          "evidence_ids": [
+            "example-5-overview"
+          ]
+        }
+      ],
+      "methods": [],
+      "datasets": [],
+      "results": [],
+      "limitations": [
+        {
+          "schema_version": "0.1",
+          "claim_id": "claim-example-5-limitations",
+          "text": "예시: 해당 섹션의 원문 발췌 — Preventing credit hoarding. A key risk in cooperative multi-agent systems is that one agent might dominate the workflow, suppressing others to inflate its own marginal credit. Our framework mitigates this through two mechanisms. First, Shapley values enforce efficiency and symmetry, ensuring that duplicated or suppressive behavior yields little marginal gain. Second, message-level PRM supervision distributes an agent’s credit across its responses, so redundant or uninformative steps receive near",
+          "evidence_ids": [
+            "example-5-limitations"
+          ]
+        }
+      ]
+    },
+    {
+      "schema_version": "0.1",
+      "paper_id": "arxiv:2510.26352",
+      "overview": [
+        {
+          "schema_version": "0.1",
+          "claim_id": "claim-example-6-overview",
+          "text": "예시: 해당 섹션의 원문 발췌 — Large language models (LLMs) have demonstrated remarkable capabilities across a wide range of natural language tasks, driven by advances in model scaling ( Zhao et al. 2025 ) . However, the monolithic approach of scaling a single, massive model faces challenges such as hallucination ( Maynez et al. 2020 ) and catastrophic forgetting ( Kirkpatrick et al. 2017 ) , limiting its ability to achieve robust performance across all domains. In response, a multi-agent approach based on LLMs has emerged as",
+          "evidence_ids": [
+            "example-6-overview"
+          ]
+        }
+      ],
+      "methods": [],
+      "datasets": [],
+      "results": [
+        {
+          "schema_version": "0.1",
+          "claim_id": "claim-example-6-results",
+          "text": "예시: 해당 섹션의 원문 발췌 — We conducted a series of experiments to validate our proposed method. First, we tested whether the language model graph could reveal latent model specializations by evaluating its ability to cluster models according to their known capabilities. Second, to validate the effectiveness of our team composition approach, we benchmarked the collective downstream task performance of teams constructed from the identified clusters against several baselines.",
+          "evidence_ids": [
+            "example-6-results"
+          ]
+        }
+      ],
+      "limitations": []
+    },
+    {
+      "schema_version": "0.1",
+      "paper_id": "arxiv:2511.05528",
+      "overview": [
+        {
+          "schema_version": "0.1",
+          "claim_id": "claim-example-7-overview",
+          "text": "예시: 해당 섹션의 원문 발췌 — Large Language Models (LLMs) have proven adept at generation, problem-solving, translation, and summarization, performing well on various benchmarks. An LLM’s capability to learn from vast amounts of data allows it to handle complex tasks logically and fluently. Although LLMs have demonstrated competency in handling diverse tasks, their performance is often hurt by inaccuracies ( Zhang et al., 2023 ) .\n\nMulti-agent systems (MAS) have been explored as a solution to combat this issue. These system",
+          "evidence_ids": [
+            "example-7-overview"
+          ]
+        }
+      ],
+      "methods": [
+        {
+          "schema_version": "0.1",
+          "claim_id": "claim-example-7-methods",
+          "text": "예시: 해당 섹션의 원문 발췌 — In this work, we developed SMAGDi (Socratic Multi-Agent Interaction Graph Distillation), enabling efficient deliberation over multi-step problems by simulating domain-specific personas through SCoT (Socratic Chain-of-Thought) to mimic these analysis processes. These domain-specific personas differ from the traditional use of interchangeable agents, as each has a specific alignment and purpose ( Wei et al., 2023 ) .",
+          "evidence_ids": [
+            "example-7-methods"
+          ]
+        }
+      ],
+      "datasets": [],
+      "results": [],
+      "limitations": [
+        {
+          "schema_version": "0.1",
+          "claim_id": "claim-example-7-limitations",
+          "text": "예시: 해당 섹션의 원문 발췌 — Training Data Due to computational constraints, we did not train our models on the full auxiliary train split of MMLU. Further testing will be needed to confirm that SMAGDi will perform better than other models if trained on all data.\n\nLarge-Scale Setups Since SMAGDi was tested on lightweight models, we lack proof of its scalability to larger environments. In application, alternatives that provide similar results with minimal computational costs would prove to be more efficient.\n\nDynamic Weighti",
+          "evidence_ids": [
+            "example-7-limitations"
+          ]
+        }
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "schema_version": "0.1",
+      "evidence_id": "example-0-overview",
+      "paper_id": "arxiv:2609.38327",
+      "section_id": "S1",
+      "quote": "AI agents are increasingly being deployed in multi-agent systems, in which agents communicate, interact, and cooperate to complete tasks. Multi-agent systems have been shown to improve over single agents across a variety of domains and task types ( Wu et al., 2023 ; Guo et al., 2024 ; Hong et al., 2024 ; Qian et al., 2024 ; Du et al., 2024 ; Kim et al., 2024 ; Agashe et al., 2025 ) . However, comparatively little is known about their collective dynamics, such as emergent or nonlinear behavior; a"
+    },
+    {
+      "schema_version": "0.1",
+      "evidence_id": "example-0-results",
+      "paper_id": "arxiv:2609.38327",
+      "section_id": "S3",
+      "quote": "We theoretically derive d c d_{c} for all four search task classes. We show that needle and chain search tasks will never reach a phase transition in communication degree (Section 3.1 ), whereas d c d_{c} exists for tree and factorizable search (Section 3.2 )."
+    },
+    {
+      "schema_version": "0.1",
+      "evidence_id": "example-1-overview",
+      "paper_id": "arxiv:2609.29509",
+      "section_id": "S1",
+      "quote": "Modern uses of large language models (LLMs) are inherently conversational and iterative, as users and agents co-construct tasks over multiple turns, revise goals, and recover from mistakes. Recent multi-turn evaluations show that single-turn prowess does not guarantee long-horizon reliability: agentic setups reveal gaps in reasoning and decision-making Liu et al. (2023) , tool use and natural-language feedback help but interact idiosyncratically with training and instruction tuning Wang et al. ("
+    },
+    {
+      "schema_version": "0.1",
+      "evidence_id": "example-1-methods",
+      "paper_id": "arxiv:2609.29509",
+      "section_id": "S4",
+      "quote": "Experimental Factors. We implement a factorial design that crosses several core dimensions, with independent randomization per experimental cell and replicated trials: social context: isolated vs. broadcast; hedonic drive: crave vs. like vs. neutral; age persona: child vs. adult vs. senior; tool-use policy: MUST vs. MAY. Optional toggles in the run plan include budget visibility (visible vs. hidden). The default total time is set to max_steps = 20 (minutes), with a fixed answer format and final "
+    },
+    {
+      "schema_version": "0.1",
+      "evidence_id": "example-1-results",
+      "paper_id": "arxiv:2609.29509",
+      "section_id": "S5",
+      "quote": "Sample and Data Quality. We ran 19,200 agent trajectories across 64 experimental cells (6 agents per cell, with a time horizon of T = 19 T=19 ). The data quality was high, with 99.9% of trajectories being valid and only 0.1% invalid. The aggregate behavior of agents shows a strong impulse to eat in the first minute, followed by a long tail of waiting. Key metrics include an initial eat rate ≈ 0.125 \\approx 0.125 , a total eat rate ≈ 0.241 \\approx 0.241 , and a winners rate ≈ 0.759 \\approx 0.759 "
+    },
+    {
+      "schema_version": "0.1",
+      "evidence_id": "example-2-overview",
+      "paper_id": "arxiv:2607.01425",
+      "section_id": "S1",
+      "quote": "As software projects evolve rapidly, they often lead to incomplete, outdated, or inconsistent documentation. This friction slows on-boarding, complicates maintenance, and increases the risk of defects and architectural drift. To address these problems, considerable efforts have been dedicated to automated code summarization, such as identifying class stereotypes and retrieving functional keywords ( Zhu and Pan, 2019 ) . More recently, deep learning approaches have advanced this field by utilizin"
+    },
+    {
+      "schema_version": "0.1",
+      "evidence_id": "example-2-results",
+      "paper_id": "arxiv:2607.01425",
+      "section_id": "S3.SS4",
+      "quote": "Beyond generating summaries, recent research has explored leveraging language models as automated evaluators to judge the quality of code understanding and summarization. CodeJudge-Eval establishes a benchmark for measuring LLMs’ code understanding abilities through their performance in judging code solution correctness ( Zhao et al., 2025 ) , while CODERPE integrates multi-role prompts into LLMs to automatically evaluate code summaries across coherence, fluency, and relevance ( Wu et al., 2025 "
+    },
+    {
+      "schema_version": "0.1",
+      "evidence_id": "example-3-overview",
+      "paper_id": "arxiv:2512.13930",
+      "section_id": "Sx1",
+      "quote": "Recent advances in artificial intelligence (AI) have expanded its role in scientific research, enabling systems to analyze data, identify patterns, and even propose hypotheses. [ 6 ] Yet, most of these models operate within fixed objectives and have limited ability to deliberate about scientific questions or adapt their strategies based on outcomes. Reasoning, the process of evaluating competing hypotheses and designing informative experiments, is central to genuine scientific exploration. In ma"
+    },
+    {
+      "schema_version": "0.1",
+      "evidence_id": "example-3-methods",
+      "paper_id": "arxiv:2512.13930",
+      "section_id": "Sx2.SSx1",
+      "quote": "The MASTER framework integrates LLM reasoning with autonomous electronic-structure simulation in a closed loop that emulates the operation of a scientific research team (Fig. 1 a). The system is organized into three tightly coupled yet functionally distinct layers. The design layer comprises a team of LLM agents that use natural language to formulate hypotheses and deliberate, individually or collectively, on which material to evaluate next based on the accumulated simulation history. Once a can"
+    },
+    {
+      "schema_version": "0.1",
+      "evidence_id": "example-4-overview",
+      "paper_id": "arxiv:2512.06196",
+      "section_id": "S1",
+      "quote": "As AI agents based on large language models (LLMs) take on longer-horizon, project-scale tasks with multiple specialized agents, maintaining alignment with stakeholder preferences becomes increasingly critical ( Masters et al. 2025 ) . Prior research has shown how cooperation can falter under partial observability, shifting incentives, or social feedback loops ( Leibo et al. 2017 ; Jaques et al. 2019 ; Carichon et al. 2025 , e.g.) . Recent studies on LLM-based debate and collaborative reasoning "
+    },
+    {
+      "schema_version": "0.1",
+      "evidence_id": "example-4-methods",
+      "paper_id": "arxiv:2512.06196",
+      "section_id": "S4",
+      "quote": "ARCANE is a framework for learning structured, interpretable proxy utilities that align workers’ behavior with stakeholder preferences. ARCANE instantiates the abstract alignment setting from Section 3 by representing the manager’s coordination signal as a rubric : a decomposable, verifiable, and dynamically configurable approximation of the stakeholder’s true utility function U ∗ ​ ( y ∣ x ) U^{*}(y\\mid x) .\n\nThe core idea is to have our manager M learn a rubric decomposer 𝔇 ϕ \\mathfrak{D}_{\\ph"
+    },
+    {
+      "schema_version": "0.1",
+      "evidence_id": "example-4-results",
+      "paper_id": "arxiv:2512.06196",
+      "section_id": "S5",
+      "quote": "Our experiments aim to answer three research questions:\n\nRQ1 (Usefulness): Does guiding the worker team with learned rubrics increase the utility of their outputs versus unguided generation?\n\nRQ2 (Faithfulness): Does the manager agent learn to rank candidates at test time in a manner consistent with the rankings computed from the stakeholder utility U ⋆ U^{\\star} ?\n\nRQ3 (Interpretability & Efficiency): Are the rubrics generated by the manager agent compact, legible, and practical to verify?"
+    },
+    {
+      "schema_version": "0.1",
+      "evidence_id": "example-5-overview",
+      "paper_id": "arxiv:2511.10687",
+      "section_id": "S1",
+      "quote": "Multi-Agent Systems (MAS) built from Large Language Models (LLMs) are emerging as a powerful paradigm for complex tasks. Agents in this context may be LLMs, ML models, or tools ( Ye et al., 2025 ; Wang et al., 2025b ; He and others, 2024 ; Yang et al., 2024 ; Team, 2025 ) , each taking structured inputs and producing outputs such as text, code, or tool calls. Unlike classical RL agents with compact, repetitive action spaces ( Bamford and Ovalle, 2021 ; Li et al., 2021a ; Hubert and others, 2021 "
+    },
+    {
+      "schema_version": "0.1",
+      "evidence_id": "example-5-limitations",
+      "paper_id": "arxiv:2511.10687",
+      "section_id": "S6",
+      "quote": "Preventing credit hoarding. A key risk in cooperative multi-agent systems is that one agent might dominate the workflow, suppressing others to inflate its own marginal credit. Our framework mitigates this through two mechanisms. First, Shapley values enforce efficiency and symmetry, ensuring that duplicated or suppressive behavior yields little marginal gain. Second, message-level PRM supervision distributes an agent’s credit across its responses, so redundant or uninformative steps receive near"
+    },
+    {
+      "schema_version": "0.1",
+      "evidence_id": "example-6-overview",
+      "paper_id": "arxiv:2510.26352",
+      "section_id": "Sx1",
+      "quote": "Large language models (LLMs) have demonstrated remarkable capabilities across a wide range of natural language tasks, driven by advances in model scaling ( Zhao et al. 2025 ) . However, the monolithic approach of scaling a single, massive model faces challenges such as hallucination ( Maynez et al. 2020 ) and catastrophic forgetting ( Kirkpatrick et al. 2017 ) , limiting its ability to achieve robust performance across all domains. In response, a multi-agent approach based on LLMs has emerged as"
+    },
+    {
+      "schema_version": "0.1",
+      "evidence_id": "example-6-results",
+      "paper_id": "arxiv:2510.26352",
+      "section_id": "Sx3",
+      "quote": "We conducted a series of experiments to validate our proposed method. First, we tested whether the language model graph could reveal latent model specializations by evaluating its ability to cluster models according to their known capabilities. Second, to validate the effectiveness of our team composition approach, we benchmarked the collective downstream task performance of teams constructed from the identified clusters against several baselines."
+    },
+    {
+      "schema_version": "0.1",
+      "evidence_id": "example-7-overview",
+      "paper_id": "arxiv:2511.05528",
+      "section_id": "S1",
+      "quote": "Large Language Models (LLMs) have proven adept at generation, problem-solving, translation, and summarization, performing well on various benchmarks. An LLM’s capability to learn from vast amounts of data allows it to handle complex tasks logically and fluently. Although LLMs have demonstrated competency in handling diverse tasks, their performance is often hurt by inaccuracies ( Zhang et al., 2023 ) .\n\nMulti-agent systems (MAS) have been explored as a solution to combat this issue. These system"
+    },
+    {
+      "schema_version": "0.1",
+      "evidence_id": "example-7-methods",
+      "paper_id": "arxiv:2511.05528",
+      "section_id": "S3",
+      "quote": "In this work, we developed SMAGDi (Socratic Multi-Agent Interaction Graph Distillation), enabling efficient deliberation over multi-step problems by simulating domain-specific personas through SCoT (Socratic Chain-of-Thought) to mimic these analysis processes. These domain-specific personas differ from the traditional use of interchangeable agents, as each has a specific alignment and purpose ( Wei et al., 2023 ) ."
+    },
+    {
+      "schema_version": "0.1",
+      "evidence_id": "example-7-limitations",
+      "paper_id": "arxiv:2511.05528",
+      "section_id": "S7",
+      "quote": "Training Data Due to computational constraints, we did not train our models on the full auxiliary train split of MMLU. Further testing will be needed to confirm that SMAGDi will perform better than other models if trained on all data.\n\nLarge-Scale Setups Since SMAGDi was tested on lightweight models, we lack proof of its scalability to larger environments. In application, alternatives that provide similar results with minimal computational costs would prove to be more efficient.\n\nDynamic Weighti"
+    }
+  ],
+  "connections": [],
+  "research_gaps": [],
+  "data_provenance": "example_fixture"
+}

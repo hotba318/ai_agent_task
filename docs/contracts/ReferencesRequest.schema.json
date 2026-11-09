@@ -1,0 +1,41 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.1",
+      "default": "0.1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "task_id": {
+      "pattern": "^[A-Za-z0-9_-]{1,100}$",
+      "title": "Task Id",
+      "type": "string"
+    },
+    "run_id": {
+      "pattern": "^[A-Za-z0-9_-]{1,100}$",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "paper_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Paper Ids",
+      "type": "array"
+    },
+    "min_citing_papers": {
+      "default": 2,
+      "minimum": 2,
+      "title": "Min Citing Papers",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "task_id",
+    "run_id"
+  ],
+  "title": "ReferencesRequest",
+  "type": "object",
+  "$comment": "Provisional Group 3 contract v0.1; requires agreement with Groups 1 and 2."
+}

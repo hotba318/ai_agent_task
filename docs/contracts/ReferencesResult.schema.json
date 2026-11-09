@@ -1,0 +1,219 @@
+{
+  "$defs": {
+    "CommonReference": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1",
+          "default": "0.1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "reference_id": {
+          "title": "Reference Id",
+          "type": "string"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "doi": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Doi"
+        },
+        "arxiv_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Arxiv Id"
+        },
+        "cited_by_count": {
+          "minimum": 2,
+          "title": "Cited By Count",
+          "type": "integer"
+        },
+        "cited_by_paper_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Cited By Paper Ids",
+          "type": "array"
+        },
+        "occurrences": {
+          "items": {
+            "$ref": "#/$defs/ReferenceOccurrence"
+          },
+          "title": "Occurrences",
+          "type": "array"
+        }
+      },
+      "required": [
+        "reference_id",
+        "cited_by_count",
+        "cited_by_paper_ids",
+        "occurrences"
+      ],
+      "title": "CommonReference",
+      "type": "object"
+    },
+    "PossibleDuplicate": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1",
+          "default": "0.1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "left": {
+          "$ref": "#/$defs/ReferenceOccurrence"
+        },
+        "right": {
+          "$ref": "#/$defs/ReferenceOccurrence"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "left",
+        "right",
+        "reason"
+      ],
+      "title": "PossibleDuplicate",
+      "type": "object"
+    },
+    "ReferenceOccurrence": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "0.1",
+          "default": "0.1",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "paper_id": {
+          "title": "Paper Id",
+          "type": "string"
+        },
+        "reference_id": {
+          "title": "Reference Id",
+          "type": "string"
+        },
+        "source_locator": {
+          "title": "Source Locator",
+          "type": "string"
+        },
+        "raw_text": {
+          "title": "Raw Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "paper_id",
+        "reference_id",
+        "source_locator",
+        "raw_text"
+      ],
+      "title": "ReferenceOccurrence",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "0.1",
+      "default": "0.1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "task_id": {
+      "title": "Task Id",
+      "type": "string"
+    },
+    "paper_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Paper Ids",
+      "type": "array"
+    },
+    "common_references": {
+      "items": {
+        "$ref": "#/$defs/CommonReference"
+      },
+      "title": "Common References",
+      "type": "array"
+    },
+    "possible_duplicates": {
+      "items": {
+        "$ref": "#/$defs/PossibleDuplicate"
+      },
+      "title": "Possible Duplicates",
+      "type": "array"
+    },
+    "ranking_basis": {
+      "const": "distinct_selected_papers_citing_reference",
+      "default": "distinct_selected_papers_citing_reference",
+      "title": "Ranking Basis",
+      "type": "string"
+    },
+    "minimum_citing_papers": {
+      "default": 2,
+      "minimum": 2,
+      "title": "Minimum Citing Papers",
+      "type": "integer"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    },
+    "review_required": {
+      "default": false,
+      "title": "Review Required",
+      "type": "boolean"
+    },
+    "decisions": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Decisions",
+      "type": "array"
+    }
+  },
+  "required": [
+    "task_id",
+    "paper_ids",
+    "common_references"
+  ],
+  "title": "ReferencesResult",
+  "type": "object",
+  "$comment": "Provisional Group 3 contract v0.1; requires agreement with Groups 1 and 2."
+}
