@@ -182,29 +182,7 @@ Open [http://127.0.0.1:8001/docs](http://127.0.0.1:8001/docs), expand **POST
 
 Expect HTTP `200` with relations, a cross-paper synthesis, and research gaps.
 These example templates are synthetic test data, not real research findings.
-
-## 6. Run the LLM-judge evaluation
-
-The 12 test topics and their expected coverage points are in
-[`evaluation/topics.json`](./evaluation/topics.json). The example report input
-is [`evaluation/sample_reports.json`](./evaluation/sample_reports.json). With
-the virtual environment active and a Gemini key exported in the current
-terminal, run the judge as a module from the project directory:
-
-```bash
-python -m evaluation.llm_judge --reports evaluation/sample_reports.json
-```
-
-Use `--output PATH` to choose a different results file and `--model MODEL_ID`
-to select another model ID available to your API key. Do not type the literal
-placeholder `MODEL_ID`; replace it with a real model ID or omit `--model` to
-use the configured default.
-
-Scores are printed and saved to `evaluation/results.json`. The judge scores
-accuracy, coverage, synthesis, evidence quality, and overall quality from 1
-to 5, and lists missing coverage and unsupported claims. The sample report is
 only a placeholder, so low scores are expected. Replace it with actual reports
-for a meaningful evaluation. LLM-judge scores are an evaluation aid, not a
-substitute for human review.
+for a meaningful evaluation.
 
 
