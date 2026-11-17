@@ -15,11 +15,7 @@ source .venv/bin/activate
 python -m pip install -r requirements.txt
 ```
 
-Create a Gemini API key in [Google AI Studio](https://aistudio.google.com/apikey).
-Keep it private; do not commit it or paste it into source files. In each
-terminal where you will run a Gemini-backed service or the judge, set the key
-for that terminal session. In zsh, the following prompts for the key without
-displaying it:
+Paste the shared Gemini API key below:
 
 ```zsh
 read -s "GEMINI_API_KEY?Paste Gemini API key (hidden), then press Return: "
@@ -28,9 +24,6 @@ export GEMINI_API_KEY
 export GEMINI_MODEL="gemini-3.5-flash-lite"
 ```
 
-Use a model ID available to your API key. `gemini-3.5-flash-lite` is the tested
-default; override it with `GEMINI_MODEL` if necessary. A new terminal does not
-inherit variables exported only in another terminal.
 
 ## 2. Run the automated tests
 
@@ -51,8 +44,7 @@ In terminal 1, activate the environment, set `GEMINI_API_KEY` and
 ```bash
 uvicorn reader_service:app --reload --port 8000
 ```
-
-Keep the server running. Open [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+Open [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 to use the interactive API documentation.
 
 ### Store a sample paper
@@ -114,14 +106,6 @@ change its location. The reader also accepts title and sections directly in
 `/api/v1/extract`, for compatibility with the supervisor. `/api/v1/verify`
 accepts `paper_text` directly or loads sections from the store when omitted.
 
-## 4. Team contract compatibility
-
-The original `/api/v1/extract` and `/api/v1/connections` routes remain
-available. For integration with the team repository's provisional
-`group3.common` contracts, use the additional routes below. These routes accept
-the team's `PaperDocument`, `ReaderResult`, `Evidence`, `Connection`, and
-`Claim` field shapes. They do not read the teammate's JSON store by filesystem
-path; send the stored `PaperDocument` JSON as the request body instead.
 
 ### Analyze a team PaperDocument
 
@@ -158,7 +142,7 @@ evidence, common references, and topic to assemble the team's `WriterRequest`.
 The contracts in the teammate repository are marked provisional, so confirm
 schema changes with the team before relying on them as a final shared API.
 
-## 5. Test Agent 3
+## 4. Test Agent 3
 
 Keep the reader running in terminal 1. Open a second terminal, activate the
 same virtual environment, and set `GEMINI_API_KEY` and `GEMINI_MODEL` in that
@@ -223,19 +207,4 @@ only a placeholder, so low scores are expected. Replace it with actual reports
 for a meaningful evaluation. LLM-judge scores are an evaluation aid, not a
 substitute for human review.
 
-Use `python -m evaluation.llm_judge`, not
-`python evaluation/llm_judge.py`; module execution is needed for package
-imports.
 
-## Troubleshooting
-
-- **404 at `/` or `/favicon.ico`:** expected; open `/docs` for the API UI.
-- **422 Unprocessable Entity:** check that you submitted the JSON body for the
-  selected endpoint. In particular, send `evidence` to `/api/v1/verify`, not
-  `/api/v1/extract`.
-- **502 from a Gemini call:** read the response `detail`. A temporary
-  `503 UNAVAILABLE` from Gemini can be retried later. An invalid API-key error
-  means the key must be checked in Google AI Studio. A model-not-found error
-  means choose a model available to the key and set `GEMINI_MODEL`.
-- **Address already in use:** stop the existing Uvicorn process with
-  Control+C before restarting it on that port.
