@@ -46,8 +46,10 @@ def make_paper(paper_id: str, method: str = "method") -> PaperTemplate:
 class FakeModels:
     def __init__(self, response: dict[str, object]) -> None:
         self.response = response
+        self.calls: list[dict[str, object]] = []
 
     async def generate_content(self, **kwargs: object) -> SimpleNamespace:
+        self.calls.append(kwargs)
         return SimpleNamespace(parsed=self.response, text=None)
 
 
@@ -196,7 +198,7 @@ class PaperReaderServiceTests(unittest.IsolatedAsyncioTestCase):
         finally:
             reader_service.reader = previous_reader
 
-    async def test_group3_reader_rejects_non_verbatim_quote(self) -> None:
+    async def test_group3_reader_filters_bad_evidence_and_keeps_grounded_claims(self) -> None:
         paper = make_group3_paper(
             "arxiv:2501.00001",
             "results",
@@ -207,28 +209,146 @@ class PaperReaderServiceTests(unittest.IsolatedAsyncioTestCase):
                 "paper_id": paper.paper_id,
                 "results": [
                     {
-                        "claim_id": "result-1",
+                        "claim_id": "valid-claim",
+                        "text": "The method improves accuracy by 5%.",
+                        "evidence_ids": ["valid-evidence"],
+                    },
+                    {
+                        "claim_id": "partially-grounded-claim",
+                        "text": "The method improves accuracy by 5%.",
+                        "evidence_ids": ["valid-evidence", "bad-quote"],
+                    },
+                    {
+                        "claim_id": "bad-section-claim",
                         "text": "The method improves accuracy by 10%.",
-                        "evidence_ids": ["ev-1"],
-                    }
+                        "evidence_ids": ["bad-section"],
+                    },
+                    {
+                        "claim_id": "unknown-evidence-claim",
+                        "text": "The method improves accuracy by 10%.",
+                        "evidence_ids": ["missing-evidence"],
+                    },
                 ],
             },
             "evidence": [
                 {
-                    "evidence_id": "ev-1",
+                    "evidence_id": "valid-evidence",
                     "paper_id": paper.paper_id,
                     "section_id": "results",
+                    "quote": "The method improves accuracy by 5%.",
+                },
+                {
+                    "evidence_id": "bad-quote",
+                    "paper_id": paper.paper_id,
+                    "section_id": "results",
+                    "quote": "The method improves accuracy by 10%.",
+                },
+                {
+                    "evidence_id": "bad-section",
+                    "paper_id": paper.paper_id,
+                    "section_id": "unknown",
                     "quote": "The method improves accuracy by 10%.",
                 }
             ],
         }
-        client = SimpleNamespace(
-            aio=SimpleNamespace(models=FakeModels(response))
-        )
+        models = FakeModels(response)
+        client = SimpleNamespace(aio=SimpleNamespace(models=models))
         from paper_reader import GeminiPaperReader
 
-        with self.assertRaisesRegex(ValueError, "exact source substring"):
-            await GeminiPaperReader(client=client).analyze_group3(paper)
+        with self.assertLogs("paper_reader", level="WARNING") as logs:
+            result = await GeminiPaperReader(client=client).analyze_group3(paper)
+
+        self.assertIn("unknown section", "\n".join(logs.output))
+        self.assertIn("not an exact substring", "\n".join(logs.output))
+        self.assertIn("no valid evidence remains", "\n".join(logs.output))
+        prompt = str(models.calls[0]["contents"])
+        self.assertNotIn("abstract", prompt.lower())
+        self.assertNotIn("Test abstract", prompt)
+        self.assertEqual(
+            [item.evidence_id for item in result.evidence],
+            ["valid-evidence"],
+        )
+        self.assertEqual(
+            [claim.claim_id for claim in result.reader_result.results],
+            ["valid-claim", "partially-grounded-claim"],
+        )
+        self.assertEqual(
+            result.reader_result.results[1].evidence_ids,
+            ["valid-evidence"],
+        )
+
+    async def test_group3_reader_keeps_raise_for_wrong_paper_and_duplicate_ids(self) -> None:
+        paper = make_group3_paper(
+            "arxiv:2501.00001",
+            "results",
+            "The method improves accuracy by 5%.",
+        )
+        responses = [
+            (
+                {
+                    "reader_result": {"paper_id": "different-paper"},
+                    "evidence": [],
+                },
+                "ReaderResult paper_id",
+            ),
+            (
+                {
+                    "reader_result": {"paper_id": paper.paper_id},
+                    "evidence": [
+                        {
+                            "evidence_id": "duplicate",
+                            "paper_id": paper.paper_id,
+                            "section_id": "results",
+                            "quote": "The method improves accuracy by 5%.",
+                        },
+                        {
+                            "evidence_id": "duplicate",
+                            "paper_id": paper.paper_id,
+                            "section_id": "results",
+                            "quote": "The method improves accuracy by 5%.",
+                        },
+                    ],
+                },
+                "duplicate evidence IDs",
+            ),
+            (
+                {
+                    "reader_result": {
+                        "paper_id": paper.paper_id,
+                        "results": [
+                            {
+                                "claim_id": "duplicate",
+                                "text": "First.",
+                                "evidence_ids": ["ev"],
+                            },
+                            {
+                                "claim_id": "duplicate",
+                                "text": "Second.",
+                                "evidence_ids": ["ev"],
+                            },
+                        ],
+                    },
+                    "evidence": [
+                        {
+                            "evidence_id": "ev",
+                            "paper_id": paper.paper_id,
+                            "section_id": "results",
+                            "quote": "The method improves accuracy by 5%.",
+                        }
+                    ],
+                },
+                "duplicate claim IDs",
+            ),
+        ]
+        from paper_reader import GeminiPaperReader
+
+        for response, message in responses:
+            with self.subTest(message=message):
+                client = SimpleNamespace(
+                    aio=SimpleNamespace(models=FakeModels(response))
+                )
+                with self.assertRaisesRegex(ValueError, message):
+                    await GeminiPaperReader(client=client).analyze_group3(paper)
 
 
 class ConnectionsAgentTests(unittest.IsolatedAsyncioTestCase):
@@ -337,6 +457,154 @@ class ConnectionsAgentTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(result.connections[0].kind, "similarity")
         finally:
             connections_service.agent = previous_agent
+
+    async def test_group3_connections_filter_bad_claims_connections_and_gaps(self) -> None:
+        request = Group3ConnectionsRequest(
+            reader_results=[
+                ReaderResult(paper_id="paper-1"),
+                ReaderResult(paper_id="paper-2"),
+            ],
+            evidence=[
+                Evidence(
+                    evidence_id="e1",
+                    paper_id="paper-1",
+                    section_id="methods",
+                    quote="Method A",
+                ),
+                Evidence(
+                    evidence_id="e2",
+                    paper_id="paper-2",
+                    section_id="methods",
+                    quote="Method A",
+                ),
+            ],
+        )
+        response = {
+            "connections": [
+                {
+                    "connection_id": "keep",
+                    "kind": "similarity",
+                    "claims": [
+                        {
+                            "claim_id": "c1",
+                            "text": "Paper 1 uses method A.",
+                            "evidence_ids": ["e1"],
+                        },
+                        {
+                            "claim_id": "c2",
+                            "text": "Paper 2 uses method A.",
+                            "evidence_ids": ["e2"],
+                        },
+                        {
+                            "claim_id": "bad-claim",
+                            "text": "Unsupported claim.",
+                            "evidence_ids": ["unknown"],
+                        },
+                    ],
+                },
+                {
+                    "connection_id": "drop-after-bad-claim",
+                    "kind": "difference",
+                    "claims": [
+                        {
+                            "claim_id": "only-valid-claim",
+                            "text": "Paper 1 uses method A.",
+                            "evidence_ids": ["e1"],
+                        },
+                        {
+                            "claim_id": "bad-claim-2",
+                            "text": "Unsupported claim.",
+                            "evidence_ids": ["unknown"],
+                        },
+                    ],
+                },
+            ],
+            "research_gaps": [
+                {
+                    "claim_id": "valid-gap",
+                    "text": "Deployment cost is not reported.",
+                    "evidence_ids": ["e1"],
+                },
+                {
+                    "claim_id": "invalid-gap",
+                    "text": "Unsupported gap.",
+                    "evidence_ids": ["unknown"],
+                },
+            ],
+        }
+        client = SimpleNamespace(
+            aio=SimpleNamespace(models=FakeModels(response))
+        )
+        agent = connections_service.GeminiConnectionsAgent(client=client)
+
+        with self.assertLogs("connections_service", level="WARNING") as logs:
+            result = await agent.find_group3_connections(request)
+
+        self.assertIn("Discarding claim", "\n".join(logs.output))
+        self.assertIn("fewer than two distinct papers", "\n".join(logs.output))
+        self.assertIn("Discarding research gap", "\n".join(logs.output))
+        self.assertEqual(
+            [item.connection_id for item in result.connections],
+            ["keep"],
+        )
+        self.assertEqual(
+            [claim.claim_id for claim in result.connections[0].claims],
+            ["c1", "c2"],
+        )
+        self.assertEqual(
+            [claim.claim_id for claim in result.research_gaps],
+            ["valid-gap"],
+        )
+
+    async def test_group3_connections_keeps_raise_for_duplicate_connection_ids(self) -> None:
+        request = Group3ConnectionsRequest(
+            reader_results=[
+                ReaderResult(paper_id="paper-1"),
+                ReaderResult(paper_id="paper-2"),
+            ],
+            evidence=[
+                Evidence(
+                    evidence_id="e1",
+                    paper_id="paper-1",
+                    section_id="methods",
+                    quote="Method A",
+                ),
+                Evidence(
+                    evidence_id="e2",
+                    paper_id="paper-2",
+                    section_id="methods",
+                    quote="Method A",
+                ),
+            ],
+        )
+        duplicate_connection = {
+            "connection_id": "duplicate",
+            "kind": "similarity",
+            "claims": [
+                {
+                    "claim_id": "c1",
+                    "text": "Paper 1 uses method A.",
+                    "evidence_ids": ["e1"],
+                },
+                {
+                    "claim_id": "c2",
+                    "text": "Paper 2 uses method A.",
+                    "evidence_ids": ["e2"],
+                },
+            ],
+        }
+        response = {
+            "connections": [duplicate_connection, duplicate_connection],
+            "research_gaps": [],
+        }
+        client = SimpleNamespace(
+            aio=SimpleNamespace(models=FakeModels(response))
+        )
+
+        with self.assertRaisesRegex(ValueError, "duplicate connection IDs"):
+            await connections_service.GeminiConnectionsAgent(
+                client=client
+            ).find_group3_connections(request)
 
 
 class GeminiSchemaTests(unittest.TestCase):

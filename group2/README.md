@@ -120,9 +120,12 @@ curl -X POST http://127.0.0.1:8000/api/v1/group3/read \
 
 The response has two fields: `reader_result` and `evidence`. Claims use the
 team's `claim_id`, `text`, and `evidence_ids` fields; evidence uses
-`evidence_id`, `paper_id`, `section_id`, and `quote`. The reader rejects quotes
-that are not exact substrings of the referenced source section, unknown
-section IDs, cross-paper evidence, or invalid claim/evidence links.
+`evidence_id`, `paper_id`, `section_id`, and `quote`. Gemini receives the
+paper's sections, not its abstract. The reader validates each quote against
+its cited section; evidence with a wrong paper ID, unknown section, or
+non-verbatim quote is logged and discarded individually. Claims keep their
+valid evidence links, and claims with no valid evidence are discarded. A
+mismatched ReaderResult paper ID or duplicate IDs remains a request-level error.
 
 Keep the original `PaperDocument` for the writer's `papers` field. Collect
 each response's `reader_result` into `reader_results` and all `evidence`
@@ -134,8 +137,11 @@ With Agent 3 running on port 8001, send at least two `reader_results` and their
 combined evidence to `POST /api/v1/group3/connections`. Its response contains
 `connections` and `research_gaps`, shaped for the matching `WriterRequest`
 fields. Connection kinds are `similarity`, `difference`, and `conflict`;
-claims cite the supplied evidence IDs. The service rejects unknown evidence
-references and connections that are not supported across at least two papers.
+claims cite the supplied evidence IDs. The service validates evidence
+references and checks that connections are supported across at least two
+papers. Invalid claims and research gaps are logged and skipped; a connection
+is skipped if its remaining claims do not cite at least two papers. Duplicate
+connection IDs remain a request-level error.
 
 Combine the Agent 3 response with the original papers, reader results,
 evidence, common references, and topic to assemble the team's `WriterRequest`.
