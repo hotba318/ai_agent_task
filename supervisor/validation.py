@@ -204,7 +204,7 @@ async def check_paper(
         try:
             fixed, reason = await retry_claim(http, paper, claim, evidence, assessment.reason, settings, budget)
         except Exception as error:
-            fixed, reason = None, f'the retry failed ({type(error).__name__})'
+            fixed, reason = None, f'the retry failed ({type(error).__name__}: {str(error)[:150]})'
         if fixed is None:
             del kept[claim.claim_id]
             unverified.append(ClaimProblem(paper.paper_id, claim, reason, keepable=True))
