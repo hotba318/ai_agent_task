@@ -247,12 +247,20 @@ async def check_connections(
     paper_of = {item.evidence_id: item.paper_id for item in evidence}
     claims = [claim for connection in connections for claim in connection.claims] + research_gaps
     counts = Counter(claim.claim_id for claim in claims)
-    usable = [claim for claim in claims if counts[claim.claim_id] == 1 and claim.claim_id not in reader_claim_ids
-              and set(claim.evidence_ids) <= paper_of.keys()]
+    reasons = {}
+    for claim in claims:
+        unknown = sorted(set(claim.evidence_ids) - paper_of.keys())
+        if counts[claim.claim_id] > 1 or claim.claim_id in reader_claim_ids:
+            reasons[claim.claim_id] = 'its claim ID is already used by another claim'
+        elif unknown:
+            reasons[claim.claim_id] = f'it cites unknown evidence: {", ".join(unknown)}'
+    usable = [claim for claim in claims if claim.claim_id not in reasons]
     warnings = []
     try:
         assessments = await judge_claims(http, usable, evidence, settings, budget)
         accepted = {assessment.claim_id for assessment in assessments if assessment.verdict == 'supported'}
+        reasons.update({assessment.claim_id: f'the judge said {assessment.verdict}: {assessment.reason}'
+                        for assessment in assessments if assessment.verdict != 'supported'})
     except Exception as error:
         accepted = {claim.claim_id for claim in usable}
         warnings.append(f"The judge could not check Agent 3's claims ({type(error).__name__}: {str(error)[:100]}).")
@@ -267,6 +275,7 @@ async def check_connections(
         else:
             kept_connections.append(connection.model_copy(update={'claims': kept}))
     kept_gaps = [claim for claim in research_gaps if claim.claim_id in accepted]
-    if len(kept_gaps) < len(research_gaps):
-        warnings.append(f'{len(research_gaps) - len(kept_gaps)} research gap(s) were dropped: they did not pass the checks.')
+    for claim in research_gaps:
+        if claim.claim_id not in accepted:
+            warnings.append(f'Research gap dropped ({reasons[claim.claim_id]}): "{claim.text[:100]}"')
     return kept_connections, kept_gaps, warnings

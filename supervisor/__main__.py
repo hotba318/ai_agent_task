@@ -6,6 +6,7 @@ from supervisor.flow import RunStopped, run
 from supervisor.memory import RunMemory
 from supervisor.validation import UnverifiedClaim
 from supervisor.review import keep_hint, keep_question, parse_keep_answer
+from supervisor.terminal import read_line
 
 async def _print_progress(message: str) -> None:
     """Show each progress message in the terminal as the run goes."""
@@ -16,7 +17,7 @@ async def _ask_in_terminal(claims: list[UnverifiedClaim]) -> set[str]:
     """Ask in the terminal which claims to keep, until the answer can be understood."""
     print(keep_question(claims))
     while True:
-        answer = await asyncio.to_thread(input, '> ')
+        answer = await read_line('> ')
         chosen = parse_keep_answer(answer, claims)
         if chosen is not None:
             print(f'Keeping {len(chosen)} claim(s).', flush=True)
@@ -50,7 +51,7 @@ def main() -> int:
     for item in output.unverified:
         print(f'  {item.claim.claim_id}: {item.reason}')
         for passage in item.closest:
-            print(f'closest: {passage.section_id} | {passage.text[:80]}')
+            print(f'    closest: {passage.section_id} | {passage.text[:80]}')
     print(f'Report saved by the writer at: {draft.markdown_path}')
     print(f'Final report (with the supervisor review) saved at: {output.report_path}')
     print('--- first lines of the report ---')

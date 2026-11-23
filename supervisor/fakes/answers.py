@@ -1,7 +1,5 @@
 from pathlib import Path
 from uuid import uuid4
-
-from aiohttp import request
 from group3.common.analysis_schemas import (
     Claim,
     Connection,

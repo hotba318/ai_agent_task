@@ -201,19 +201,24 @@ async def find_connections(
     task_id: str, reader_results: list[ReaderResult], evidence: list[Evidence],
     settings: SupervisorSettings, memory: RunMemory,
 ) -> tuple[list[Connection], list[Claim], list[str]]:
-    """Step 5: Agent 3 compares the papers and its answer is checked; a failure becomes a warning and an empty result."""
+    """Step 5: Agent 3 compares the papers and its answer is checked; tried twice, then a warning and an empty result."""
     await memory.record_step(task_id, 'connections', 'working')
     request = {
         'reader_results': [result.model_dump(mode='json') for result in reader_results],
         'evidence': [item.model_dump(mode='json') for item in evidence],
     }
-    try:
-        reply = await call_agent(settings.connections_url, request, settings.agent_timeout_seconds)
-        connections = [Connection.model_validate(item) for item in reply['connections']]
-        research_gaps = [Claim.model_validate(item) for item in reply['research_gaps']]
-    except Exception as error:
-        await memory.record_step(task_id, 'connections', 'failed', notes=_short(error))
-        return [], [], [f'Connections and research gaps are missing: Agent 3 failed ({_short(error)}).']
+    for attempt in (1, 2):
+        try:
+            reply = await call_agent(settings.connections_url, request, settings.agent_timeout_seconds)
+            connections = [Connection.model_validate(item) for item in reply['connections']]
+            research_gaps = [Claim.model_validate(item) for item in reply['research_gaps']]
+        except Exception as error:
+            if attempt == 2:
+                await memory.record_step(task_id, 'connections', 'failed', notes=_short(error))
+                return [], [], [f'Connections and research gaps are missing: Agent 3 failed twice ({_short(error)}).']
+            await memory.record_step(task_id, 'connections', 'working', notes=f'retrying after {_short(error)}', retry=True)
+            continue
+        break
     reader_claim_ids = {claim.claim_id for result in reader_results for claim in all_claims(result)}
     async with httpx.AsyncClient(timeout=settings.groq_timeout_seconds) as http:
         connections, research_gaps, warnings = await check_connections(
@@ -332,6 +337,9 @@ async def prepare_run(
     except RunStopped:
         await memory.finish_run(task_id, 'stopped')
         raise
+    except asyncio.CancelledError:
+        await memory.finish_run(task_id, 'interrupted')
+        raise
     except Exception:
         await memory.finish_run(task_id, 'failed')
         raise
@@ -392,6 +400,9 @@ async def complete_run(
     except RunStopped:
         await memory.finish_run(task_id, 'stopped')
         raise
+    except asyncio.CancelledError:
+        await memory.finish_run(task_id, 'interrupted')
+        raise
     except Exception:
         await memory.finish_run(task_id, 'failed')
         raise
@@ -441,6 +452,13 @@ async def run(
     """The whole run: phase A, the user's decision on keepable claims, then phase B. Raises RunStopped if it cannot continue."""
     state = await prepare_run(topic, settings, memory, progress)
     if keepable_claims(state):
-        keepable = await ask_about_claims(state, memory)
-        state = await apply_decision(state, await decide(keepable), memory)
+        try:
+            keepable = await ask_about_claims(state, memory)
+            state = await apply_decision(state, await decide(keepable), memory)
+        except asyncio.CancelledError:
+            await memory.finish_run(state.task_id, 'interrupted')
+            raise
+        except Exception:
+            await memory.finish_run(state.task_id, 'failed')
+            raise
     return await complete_run(state, settings, memory, progress)

@@ -6,6 +6,7 @@ from a2a.client import A2ACardResolver, AgentCardResolutionError, ClientConfig, 
 from a2a.helpers import get_data_parts, get_message_text, new_text_message
 from a2a.types import Role, SendMessageRequest, TaskState
 from supervisor.config import SupervisorSettings
+from supervisor.terminal import read_line
 
 def _show_summary(summary: dict) -> None:
     """Print the counts and warnings from the report's JSON summary."""
@@ -41,7 +42,7 @@ async def ask(topic: str, url: str) -> int:
             task_id, context_id, state, last = await _send(client, topic, None, None)
             while state == TaskState.TASK_STATE_INPUT_REQUIRED:
                 print(last)
-                answer = await asyncio.to_thread(input, '> ')
+                answer = await read_line( '> ')
                 task_id, context_id, state, last = await _send(client, answer, task_id, context_id)
         finally:
             await client.close()

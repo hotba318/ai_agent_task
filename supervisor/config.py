@@ -16,8 +16,8 @@ class SupervisorSettings(BaseSettings):
     agent_timeout_seconds: float = Field(default=600, gt=0)
 
     # How a run behaves (team decisions)
-    target_papers: int = Field(default=8, gt=0)
-    minimum_papers: int = Field(default=7, gt=0)
+    target_papers: int = Field(default=5, gt=0)
+    minimum_papers: int = Field(default=4, gt=0)
     min_citing_papers: int = Field(default=2, ge=2)
     coverage_retries: int = Field(default=1, ge=0)
     evidence_retries: int = Field(default=2, ge=0)

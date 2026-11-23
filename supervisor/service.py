@@ -1,4 +1,5 @@
 import asyncio
+from contextlib import asynccontextmanager
 from urllib.parse import urlparse
 import uvicorn
 from a2a.helpers import get_message_text, new_data_part, new_task_from_user_message, new_text_part
@@ -10,6 +11,7 @@ from a2a.server.tasks import InMemoryTaskStore, TaskUpdater
 from a2a.types import AgentCapabilities, AgentCard, AgentInterface, AgentSkill, TaskState
 from starlette.applications import Starlette
 from supervisor.config import SupervisorSettings
+from supervisor.conversation import show
 from supervisor.flow import (RunState, RunStopped, apply_decision, ask_about_claims,
                              complete_run, keepable_claims, prepare_run)
 from supervisor.memory import RunMemory
@@ -36,25 +38,31 @@ class SupervisorExecutor(AgentExecutor):
             return updater.new_agent_message([new_text_part(text)])
 
         async def progress(text: str) -> None:
+            show('Supervisor', text)
             await updater.update_status(TaskState.TASK_STATE_WORKING, message=message(text))
 
         text = get_message_text(context.message).strip()
         try:
             state = self.waiting.get(task.id)
+            kind = 'topic' if state is None else 'answer'
+            show('Supervisor', f'← User: {kind} "{text}"   task {task.id[:8]}')
             if state is None:
                 if not text:
+                    show('Supervisor', '→ User: no topic was sent  task state: FAILED')
                     await updater.failed(message('Please send a research topic as text.'))
                     return
                 state = await prepare_run(text, self.settings, self.memory, progress)
                 if keepable_claims(state):
                     self.waiting[task.id] = state
                     keepable = await ask_about_claims(state, self.memory)
+                    show('Supervisor', f'→ User: {len(keepable)} claim(s) to keep or drop  task state: INPUT_REQUIRED')
                     await updater.requires_input(message(keep_question(keepable)))
                     return
             else:
                 keepable = keepable_claims(state)
                 chosen = parse_keep_answer(text, keepable)
                 if chosen is None:
+                    show('Supervisor', '→ User: answer not understood, asking again  task state: INPUT_REQUIRED')
                     await updater.requires_input(message(keep_hint(keepable)))
                     return
                 del self.waiting[task.id]
@@ -62,6 +70,7 @@ class SupervisorExecutor(AgentExecutor):
             output = await complete_run(state, self.settings, self.memory, progress)
         except RunStopped as stopped:
             self.waiting.pop(task.id, None)
+            show('Supervisor', f'→ User: run stopped ({stopped})  task state: FAILED')
             await updater.failed(message(f'Run stopped: {stopped}'))
             return
         summary = {
@@ -78,11 +87,18 @@ class SupervisorExecutor(AgentExecutor):
                    new_data_part(summary, media_type='application/json')],
             name='final-report',
         )
+        show('Supervisor', '→ User: final report  task state: COMPLETED')
         await updater.complete(message(f'Done. Report saved at {output.report_path}'))
 
     async def cancel(self, context: RequestContext, event_queue: EventQueue) -> None:
         raise NotImplementedError('Cancel is not supported.')
 
+    async def interrupt_waiting(self) -> None:
+        """Record the runs still waiting for the user's answer as interrupted; called when the service stops."""
+        for state in self.waiting.values():
+            await self.memory.finish_run(state.task_id, 'interrupted')
+        self.waiting.clear()
+        
 def build_app(settings: SupervisorSettings, memory: RunMemory) -> Starlette:
     """The supervisor as an A2A agent: its card and its JSON-RPC endpoint."""
     skill = AgentSkill(
@@ -105,15 +121,22 @@ def build_app(settings: SupervisorSettings, memory: RunMemory) -> Starlette:
         supported_interfaces=[AgentInterface(protocol_binding='JSONRPC', url=settings.service_url, protocol_version='1.0')],
         skills=[skill],
     )
+    executor = SupervisorExecutor(settings, memory)
+    @asynccontextmanager
+    async def lifespan(app: Starlette):
+        yield
+        await executor.interrupt_waiting()
+
     handler = DefaultRequestHandler(
-        agent_executor=SupervisorExecutor(settings, memory),
+        agent_executor=executor,
         task_store=InMemoryTaskStore(),
         agent_card=card,
     )
+
     routes = []
     routes.extend(create_agent_card_routes(card))
     routes.extend(create_jsonrpc_routes(handler, '/'))
-    return Starlette(routes=routes)
+    return Starlette(routes=routes, lifespan=lifespan)
 
 async def main() -> None:
     settings = SupervisorSettings()
