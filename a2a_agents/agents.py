@@ -34,7 +34,7 @@ async def _forward(url: str, request: dict) -> dict:
     return response.json()
 
 async def reader(request: dict) -> dict:
-    """MPaper reader: reads a paper, or checks one claim when the request has evidence."""
+    """Paper reader: reads a paper, or checks one claim when the request has evidence."""
     if 'evidence' in request:
         return await _forward(WrapperSettings().group2_reader_url + '/api/v1/verify', request)
     # Evidence must come from the paper's sections (team contract), so Gemini is not given the abstract to quote.
