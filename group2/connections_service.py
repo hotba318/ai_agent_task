@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 from typing import Any
 
@@ -16,8 +17,9 @@ from group3_contracts import (
     Claim,
     ConnectionsRequest as Group3ConnectionsRequest,
     ConnectionsResult,
-    Evidence,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class GeminiConnectionsAgent:
@@ -96,21 +98,55 @@ class GeminiConnectionsAgent:
             result.connections
         ):
             raise ValueError("Agent 3 returned duplicate connection IDs.")
+        valid_connections = []
         for connection in result.connections:
             cited_papers: set[str] = set()
+            valid_claims: list[Claim] = []
             for claim in connection.claims:
-                _validate_claim_evidence(claim, evidence_by_id)
+                unknown_evidence_ids = set(claim.evidence_ids) - evidence_by_id.keys()
+                if unknown_evidence_ids:
+                    logger.warning(
+                        "Discarding claim %r from connection %r: unknown evidence "
+                        "IDs %s.",
+                        claim.claim_id,
+                        connection.connection_id,
+                        sorted(unknown_evidence_ids),
+                    )
+                    continue
+                valid_claims.append(claim)
                 cited_papers.update(
                     evidence_by_id[evidence_id].paper_id
                     for evidence_id in claim.evidence_ids
                 )
             if len(cited_papers) < 2:
-                raise ValueError(
-                    f"Connection {connection.connection_id!r} must cite at least two papers."
+                logger.warning(
+                    "Discarding connection %r: its valid claims cite fewer than "
+                    "two distinct papers.",
+                    connection.connection_id,
                 )
+                continue
+            if len(valid_claims) != len(connection.claims):
+                connection = connection.model_copy(update={"claims": valid_claims})
+            valid_connections.append(connection)
+
+        valid_research_gaps: list[Claim] = []
         for claim in result.research_gaps:
-            _validate_claim_evidence(claim, evidence_by_id)
-        return result
+            unknown_evidence_ids = set(claim.evidence_ids) - evidence_by_id.keys()
+            if unknown_evidence_ids:
+                logger.warning(
+                    "Discarding research gap %r: unknown evidence IDs %s.",
+                    claim.claim_id,
+                    sorted(unknown_evidence_ids),
+                )
+                continue
+            valid_research_gaps.append(claim)
+
+        return result.model_copy(
+            update={
+                "connections": valid_connections,
+                "research_gaps": valid_research_gaps,
+            }
+        )
 
     async def _generate_group3_connections(
         self,
@@ -149,14 +185,6 @@ class GeminiConnectionsAgent:
 
 app = FastAPI(title="A2A Paper Connections Agent", version="1.0.0")
 agent = GeminiConnectionsAgent()
-
-
-def _validate_claim_evidence(
-    claim: Claim,
-    evidence_by_id: dict[str, Evidence],
-) -> None:
-    if not set(claim.evidence_ids) <= evidence_by_id.keys():
-        raise ValueError(f"Claim {claim.claim_id!r} cites unknown evidence.")
 
 
 @app.post("/api/v1/connections", response_model=ConnectionsReport)

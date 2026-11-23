@@ -1,3 +1,4 @@
+import logging
 import os
 from typing import TypeVar
 
@@ -20,6 +21,7 @@ from group3_contracts import (
 )
 
 StructuredModel = TypeVar("StructuredModel", bound=BaseModel)
+logger = logging.getLogger(__name__)
 
 
 class _SectionSelection(BaseModel):
@@ -151,7 +153,6 @@ class GeminiPaperReader:
         paper_content = {
             "paper_id": paper.paper_id,
             "title": paper.title,
-            "abstract": paper.abstract,
             "sections": [
                 section.model_dump(mode="json") for section in paper.sections
             ],
@@ -181,23 +182,87 @@ class GeminiPaperReader:
         ):
             raise ValueError("Reader returned duplicate claim IDs.")
 
+        valid_evidence: list[Evidence] = []
+        invalid_evidence_ids: set[str] = set()
         for item in analysis.evidence:
-            section = sections.get(item.section_id)
-            if item.paper_id != paper.paper_id or section is None:
-                raise ValueError("Evidence references a different paper or unknown section.")
-            if item.quote not in section.text:
-                raise ValueError(
-                    f"Evidence quote {item.evidence_id!r} is not an exact source substring."
+            if item.paper_id != paper.paper_id:
+                logger.warning(
+                    "Discarding evidence %r for paper %s: it references paper %s.",
+                    item.evidence_id,
+                    paper.paper_id,
+                    item.paper_id,
                 )
-        for claim in _reader_claims(analysis.reader_result):
-            if not set(claim.evidence_ids) <= evidence_by_id.keys():
-                raise ValueError(f"Claim {claim.claim_id!r} cites unknown evidence.")
-            if any(
-                evidence_by_id[evidence_id].paper_id != paper.paper_id
-                for evidence_id in claim.evidence_ids
-            ):
-                raise ValueError(f"Claim {claim.claim_id!r} cites evidence from another paper.")
-        return analysis
+                invalid_evidence_ids.add(item.evidence_id)
+                continue
+            section = sections.get(item.section_id)
+            if section is None:
+                logger.warning(
+                    "Discarding evidence %r for paper %s: unknown section %r.",
+                    item.evidence_id,
+                    paper.paper_id,
+                    item.section_id,
+                )
+                invalid_evidence_ids.add(item.evidence_id)
+                continue
+            if item.quote not in section.text:
+                logger.warning(
+                    "Discarding evidence %r for paper %s: quote is not an exact "
+                    "substring of section %r.",
+                    item.evidence_id,
+                    paper.paper_id,
+                    item.section_id,
+                )
+                invalid_evidence_ids.add(item.evidence_id)
+                continue
+            valid_evidence.append(item)
+
+        valid_evidence_ids = evidence_by_id.keys() - invalid_evidence_ids
+        updated_categories: dict[str, list[Claim]] = {}
+        for category in (
+            "overview",
+            "methods",
+            "datasets",
+            "results",
+            "limitations",
+        ):
+            updated_claims: list[Claim] = []
+            for claim in getattr(analysis.reader_result, category):
+                claim_evidence_ids = [
+                    evidence_id
+                    for evidence_id in claim.evidence_ids
+                    if evidence_id in valid_evidence_ids
+                    and evidence_by_id[evidence_id].paper_id == paper.paper_id
+                ]
+                invalid_claim_evidence_ids = set(claim.evidence_ids) - set(
+                    claim_evidence_ids
+                )
+                if invalid_claim_evidence_ids:
+                    logger.warning(
+                        "Claim %r in paper %s references invalid evidence %s.",
+                        claim.claim_id,
+                        paper.paper_id,
+                        sorted(invalid_claim_evidence_ids),
+                    )
+                if not claim_evidence_ids:
+                    logger.warning(
+                        "Discarding claim %r in paper %s: no valid evidence remains.",
+                        claim.claim_id,
+                        paper.paper_id,
+                    )
+                    continue
+                if invalid_claim_evidence_ids:
+                    claim = claim.model_copy(
+                        update={"evidence_ids": claim_evidence_ids}
+                    )
+                updated_claims.append(claim)
+            updated_categories[category] = updated_claims
+
+        reader_result = analysis.reader_result.model_copy(
+            update=updated_categories
+        )
+        return analysis.model_copy(
+            update={"reader_result": reader_result, "evidence": valid_evidence}
+        )
 
 
 def _reader_claims(result: ReaderResult) -> list[Claim]:
