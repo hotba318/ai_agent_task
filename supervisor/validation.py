@@ -119,17 +119,22 @@ class ReaderVerification(BaseModel):
 async def ask_reader_to_verify(
     paper: PaperDocument, claim_text: str, evidence: list[Evidence], settings: SupervisorSettings,
 ) -> ReaderVerification:
-    """Send a claim, its quotes and the text of the sections they come from back to the paper's reader."""
+    """Send a claim and its quotes back to the paper's reader.
+
+    The quotes are also sent as the paper text, so the reader checks the claim against its quotes only, the
+    same rule as the judge. (With the whole section it accepts claims the judge rejects; an empty paper text
+    makes the reader look the paper up in its own store, where our papers are not.)
+    """
     section_ids = list(dict.fromkeys(item.section_id for item in evidence))
-    texts = {section.section_id: section.text for section in paper.sections}
+    quotes = '\n\n'.join(item.quote for item in evidence)
     request = {
         'paper_id': paper.paper_id,
         'evidence': {
             'claim': claim_text,
-            'quote': '\n\n'.join(item.quote for item in evidence),
+            'quote': quotes,
             'section': ', '.join(section_ids),
         },
-        'paper_text': '\n\n'.join(texts[section_id] for section_id in section_ids),
+        'paper_text': quotes,
     }
     reply = await call_agent(settings.reader_url, request, settings.agent_timeout_seconds)
     return ReaderVerification.model_validate(reply)
