@@ -41,6 +41,11 @@ def render(request, plan, report_id, revision, missing, feedback=None):
         parts.append("Coverage 재작성 요청: " + text(feedback.note) + "\n\n요청 영역: " + text(", ".join(feedback.missing_sections) or "미지정") + "\n\n요청 논문: " + text(", ".join(feedback.missing_paper_ids) or "미지정"))
     parts += ["## 1. Introduction", prose(draft.introduction) if synthesized else paragraphs(plan.introduction), "## 2. Overview of Selected Papers"]
     readers = {r.paper_id: r for r in request.reader_results}
+    common_references = request.common_references.common_references
+    references_by_paper = {paper.paper_id: [] for paper in request.papers}
+    for ref in common_references:
+        for paper_id in ref.cited_by_paper_ids:
+            references_by_paper[paper_id].append(ref)
     for paper in request.papers:
         parts.append(f"### {text(paper.title)}\n\n[{text(paper.paper_id)}]({paper.source_url}) / 최초 제출 {paper.submitted_date}")
         reader = readers.get(paper.paper_id)
@@ -49,6 +54,20 @@ def render(request, plan, report_id, revision, missing, feedback=None):
             parts.append(prose(summary.paragraphs) if summary else "작성 가능한 논문별 요약 근거가 없습니다.")
         else:
             parts.append(paragraphs([c.claim_id for c in reader.overview]) if reader else "Reader 입력이 없습니다.")
+        parts += ["**논문의 한계**",
+            paragraphs([c.claim_id for c in reader.limitations]) if reader else "Reader 입력이 없습니다.",
+            "**저자가 제안한 Future Work**",
+            paragraphs([c.claim_id for c in request.paper_future_work[paper.paper_id]])
+                if request.paper_future_work.get(paper.paper_id) else "제공된 Future Work 근거가 없습니다.",
+            "**이 논문이 인용한 공통 참고문헌**"]
+        paper_refs = references_by_paper[paper.paper_id]
+        if paper_refs:
+            parts.append("\n".join(
+                f"- {text(ref.title or ref.occurrences[0].raw_text)} ({ref.cited_by_count}편에서 인용)"
+                for ref in paper_refs
+            ))
+        else:
+            parts.append("현재 참고문헌 분석에서 확인된 공통 문헌이 없습니다.")
     parts.append("## 3. Comparative Analysis")
     if synthesized:
         parts.append(prose(draft.comparison))
@@ -64,9 +83,9 @@ def render(request, plan, report_id, revision, missing, feedback=None):
     parts.append("\n".join(table))
     parts.append("## 4. Common References")
     parts.append("집계 기준: 선정 논문 중 서로 다른 인용 논문 수. 단일 논문 내 반복 인용은 한 번으로 집계합니다.")
-    if request.common_references.common_references:
+    if common_references:
         table = ["| 문헌 | 인용 논문 수 | 인용한 선정 논문 |", "|---|---:|---|"]
-        for ref in request.common_references.common_references:
+        for ref in common_references:
             label = ref.title or ref.occurrences[0].raw_text
             table.append(f"| {text(label)} | {ref.cited_by_count} | {text(', '.join(ref.cited_by_paper_ids))} |")
         parts.append("\n".join(table))
@@ -91,7 +110,7 @@ def render(request, plan, report_id, revision, missing, feedback=None):
         parts.append("미충족 영역:\n\n" + "\n".join("- " + text(v) for v in missing))
     parts += ["## 8. References"]
     parts.extend(f"- [{text(p.title)}]({p.source_url}) — {text(p.paper_id)}" for p in request.papers)
-    for ref in request.common_references.common_references:
+    for ref in common_references:
         url = "https://doi.org/" + ref.doi if ref.doi else "https://arxiv.org/abs/" + ref.arxiv_id.removeprefix("arxiv:") if ref.arxiv_id else None
         label = text(ref.title or ref.reference_id)
         parts.append(f"- [{label}]({url})" if url else "- " + label + " — " + text(ref.occurrences[0].raw_text))

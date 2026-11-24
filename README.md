@@ -10,17 +10,17 @@
 | Agent 2 Common References | 선정 논문 중 두 편 이상이 인용한 문헌 식별, 서로 다른 인용 논문 수 집계, 불확실한 식별과 누락에 대한 검토 요청. |
 | Agent 4 Writer | 제공된 분석·원문 근거를 사용한 문장 생성, 인용·수치 검사와 모델 근거 검토, Markdown 출력, 피드백에 따른 최대 한 번의 Coverage 재작성. |
 
-기본 논문 선정 목표는 8편, 최소 7편이며 설정으로 변경할 수 있습니다. 선정 기준은 관련성 우선, 최신성 차순위입니다.
+기본 논문 선정 목표는 5편, 최소 4편이며 설정으로 변경할 수 있습니다. 선정 기준은 관련성 우선, 최신성 차순위입니다.
 
 ## 논문 수 설정
 
-위 기본값은 목표 8편·최소 7편입니다. 아래 실행 예시의 `--target 3 --minimum 3`은 초기 테스트용 설정입니다. 기획대로 수집하려면 코드 수정 없이 다음과 같이 실행합니다.
+아래 실행 예시의 `--target 3 --minimum 3`은 초기 테스트용 설정입니다. 미팅에서 정한 4~5편 범위로 수집하려면 다음과 같이 실행합니다.
 
 ```powershell
-.\.venv\Scripts\python.exe -m group3.cli --topic "multi agent large language models" --target 8 --minimum 7 --task-id demo8 --result data/retrieval8.json
+.\.venv\Scripts\python.exe -m group3.cli --topic "multi agent large language models" --target 5 --minimum 4 --task-id demo5 --result data/retrieval5.json
 ```
 
-기본값은 `.env`의 `GROUP3_TARGET_PAPERS=8`, `GROUP3_MINIMUM_PAPERS=7`로 설정할 수 있으며 CLI 옵션이 우선합니다. 7편은 완료와 부족 경고, 6편 이하는 수집 부족으로 표시합니다. Agent 2·4는 입력 목록 크기에 따라 처리하므로 논문 수 변경을 위한 코드 수정은 필요 없습니다.
+기존 `.env`에 논문 수가 설정돼 있다면 `GROUP3_TARGET_PAPERS=5`, `GROUP3_MINIMUM_PAPERS=4`로 변경하세요. CLI 옵션이 우선합니다. 4편을 수집하면 완료와 부족 경고, 검색이 성공했지만 3편 이하를 수집하면 수집 부족으로 표시합니다. Agent 2·4는 입력 목록 크기에 맞춰 처리합니다.
 
 ## 파일 구성
 

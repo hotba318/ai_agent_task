@@ -24,6 +24,13 @@ def test_invalid_requests(values):
         RetrievalRequest(**(base | values))
 
 
+def test_default_paper_counts_follow_meeting_agreement(monkeypatch):
+    monkeypatch.delenv("GROUP3_TARGET_PAPERS", raising=False)
+    monkeypatch.delenv("GROUP3_MINIMUM_PAPERS", raising=False)
+    for request in (Settings(_env_file=None), RetrievalRequest(task_id="defaults", topic="multi agent systems")):
+        assert (request.target_papers, request.minimum_papers) == (5, 4)
+
+
 def test_configuration(monkeypatch):
     monkeypatch.setenv("GROUP3_TARGET_PAPERS", "12")
     monkeypatch.setenv("GROUP3_MINIMUM_PAPERS", "10")

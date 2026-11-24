@@ -77,6 +77,9 @@ def numbers(value):
 
 def validate_draft(draft,request,require_coverage=True):
     claims=validate_input(request)
+    for future_work in request.paper_future_work.values():
+        for claim in future_work:
+            del claims[claim.claim_id]
     evidence={e.evidence_id:e for e in request.evidence}
     ids=set()
     summaries=[p.paper_id for p in draft.paper_summaries]

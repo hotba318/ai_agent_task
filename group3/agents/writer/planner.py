@@ -75,6 +75,8 @@ class GroqPlanner:
 
     async def plan(self, request, feedback=None, previous_report=None):
         from .validator import all_claims
+        # Author-stated Future Work is rendered from the input, outside model synthesis.
+        request = request.model_copy(update={"paper_future_work": {}})
         calls_before=self.budget.http_attempts
         waits_before=self.budget.waits
         if not all_claims(request):

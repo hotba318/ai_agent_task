@@ -14,8 +14,8 @@ class Contract(BaseModel):
 class RetrievalRequest(Contract):
     task_id: str = Field(pattern=r"^[A-Za-z0-9_-]{1,100}$")
     topic: str = Field(min_length=1)
-    target_papers: int = Field(default=8, gt=0)
-    minimum_papers: int = Field(default=7, gt=0)
+    target_papers: int = Field(default=5, gt=0)
+    minimum_papers: int = Field(default=4, gt=0)
 
     @field_validator("topic")
     @classmethod

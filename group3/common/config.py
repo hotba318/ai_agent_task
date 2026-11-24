@@ -7,8 +7,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="GROUP3_", env_file=".env", extra="ignore")
-    target_papers: int = Field(default=8, gt=0)
-    minimum_papers: int = Field(default=7, gt=0)
+    target_papers: int = Field(default=5, gt=0)
+    minimum_papers: int = Field(default=4, gt=0)
     candidate_multiplier: int = Field(default=3, gt=0)
     download_delay_seconds: float = Field(default=15, ge=15)
     api_delay_seconds: float = Field(default=3, ge=3)

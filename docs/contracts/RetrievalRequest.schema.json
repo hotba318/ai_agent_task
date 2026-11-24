@@ -18,13 +18,13 @@
       "type": "string"
     },
     "target_papers": {
-      "default": 8,
+      "default": 5,
       "exclusiveMinimum": 0,
       "title": "Target Papers",
       "type": "integer"
     },
     "minimum_papers": {
-      "default": 7,
+      "default": 4,
       "exclusiveMinimum": 0,
       "title": "Minimum Papers",
       "type": "integer"

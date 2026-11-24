@@ -51,7 +51,7 @@ class Item:
 
 def item(paper_id: str, ref: Reference) -> Item:
     # Raw fallback is intentionally exact after removing per-paper citation back-links.
-    raw = re.split(r"\bCited by\s*:", ref.raw_text, flags=re.I)[0]
+    raw = re.split(r"\bCited\s+by\s*:", ref.raw_text, flags=re.I)[0]
     raw = re.sub(r"^\s*\[\d+\]\s*", "", raw)
     doi = normalize_doi(ref.doi)
     arxiv = normalize_arxiv(ref.arxiv_id)

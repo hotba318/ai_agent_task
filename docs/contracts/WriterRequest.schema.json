@@ -737,6 +737,17 @@
       "title": "Research Gaps",
       "type": "array"
     },
+    "paper_future_work": {
+      "additionalProperties": {
+        "items": {
+          "$ref": "#/$defs/Claim"
+        },
+        "type": "array"
+      },
+      "description": "Optional author-stated future work claims by selected paper ID.",
+      "title": "Paper Future Work",
+      "type": "object"
+    },
     "output_format": {
       "const": "markdown",
       "default": "markdown",

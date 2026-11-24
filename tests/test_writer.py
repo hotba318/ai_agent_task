@@ -48,6 +48,37 @@ async def test_markdown_and_source_map(tmp_path, writer_input):
     assert all(e.evidence_id in md for e in writer_input.evidence)
 
 
+async def test_paper_sections_scope_future_work_and_common_references(tmp_path, writer_input, make_paper):
+    first, second = writer_input.papers
+    third = document(make_paper(3), [])
+    writer_input.papers.append(third)
+    writer_input.common_references = CommonReferencesAgent().analyze(writer_input.papers, "test")
+    writer_input.paper_future_work[first.paper_id] = [
+        Claim(claim_id="future-1", text="Synthetic future work fixture", evidence_ids=["e-0-overview"])
+    ]
+    markdown = (await WriterAgent(ExtractivePlanner(), tmp_path).run(writer_input)).markdown
+    overview = markdown.split("## 2. Overview of Selected Papers", 1)[1].split("## 3. Comparative Analysis", 1)[0]
+    _, first_block, second_block, third_block = overview.split("\n### ")
+    assert "Synthetic limitations fixture" in first_block and "e-0-limitations" in first_block
+    assert "Synthetic future work fixture" in first_block and "e-0-overview" in first_block
+    assert "제공된 Future Work 근거가 없습니다." in second_block
+    assert "2편에서 인용" in first_block and "2편에서 인용" in second_block
+    assert "현재 참고문헌 분석에서 확인된 공통 문헌이 없습니다." in third_block
+    gaps = markdown.split("## 6. Research Gaps", 1)[1].split("## 7. Limitations", 1)[0]
+    assert "Synthetic future work fixture" not in gaps
+
+
+@pytest.mark.parametrize("invalid", ["foreign", "unknown_paper", "unknown_evidence"])
+def test_future_work_requires_known_paper_and_own_evidence(writer_input, invalid):
+    paper_id = writer_input.papers[0].paper_id if invalid != "unknown_paper" else "arxiv:2401.99999"
+    evidence_id = "e-1-overview" if invalid == "foreign" else "missing" if invalid == "unknown_evidence" else "e-0-overview"
+    writer_input.paper_future_work[paper_id] = [
+        Claim(claim_id="future-1", text="Synthetic future work fixture", evidence_ids=[evidence_id])
+    ]
+    with pytest.raises(ValueError, match="Future Work|invalid evidence"):
+        validate_input(writer_input)
+
+
 async def test_missing_inputs_no_fabrication(tmp_path, writer_input):
     request = writer_input.model_copy(update={"reader_results": [], "connections": [], "research_gaps": []})
     result = await WriterAgent(ExtractivePlanner(), tmp_path).run(request)

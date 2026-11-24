@@ -98,6 +98,10 @@ class WriterRequest(Contract):
     common_references: ReferencesResult
     connections: list[Connection] = Field(default_factory=list)
     research_gaps: list[Claim] = Field(default_factory=list)
+    paper_future_work: dict[str, list[Claim]] = Field(
+        default_factory=dict,
+        description="Optional author-stated future work claims by selected paper ID.",
+    )
     output_format: Literal["markdown"] = "markdown"
     data_provenance: Literal["group2", "example_fixture"] = "group2"
 

@@ -66,10 +66,11 @@ def test_empty_and_threshold(make_paper):
         CommonReferencesAgent().analyze([papers[0], papers[0]], "test")
 
 
-def test_identifier_free_exact_citation_and_tie_order(make_paper):
+@pytest.mark.parametrize("spacing", [" ", "  ", "\t", "\n"])
+def test_identifier_free_exact_citation_and_tie_order(make_paper, spacing):
     raw = "Fixture Author (2024). A complete long citation for an offline reference test."
     papers = [document(make_paper(1), [reference(raw_text=raw+" Cited by: Section 1"), reference("b",doi="10.1234/b")]),
-              document(make_paper(2), [reference(raw_text=raw+" Cited by: Section 7"), reference("b",doi="10.1234/b")])]
+              document(make_paper(2), [reference(raw_text=raw+f" CITED{spacing}BY: Section 7"), reference("b",doi="10.1234/b")])]
     forward = CommonReferencesAgent().analyze(papers,"test")
     reverse = CommonReferencesAgent().analyze(list(reversed(papers)),"test")
     assert len(forward.common_references) == 2

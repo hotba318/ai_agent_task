@@ -8,7 +8,9 @@ def all_claims(request: WriterRequest):
             claims.extend(getattr(reader, field))
     for connection in request.connections:
         claims.extend(connection.claims)
-    return claims + request.research_gaps
+    return claims + request.research_gaps + [
+        claim for future_work in request.paper_future_work.values() for claim in future_work
+    ]
 
 
 def validate_input(request: WriterRequest):
@@ -20,6 +22,8 @@ def validate_input(request: WriterRequest):
     readers = {r.paper_id: r for r in request.reader_results}
     if len(readers) != len(request.reader_results) or readers.keys() - papers.keys():
         raise ValueError("duplicate or unknown Reader paper")
+    if request.paper_future_work.keys() - papers.keys():
+        raise ValueError("Future Work points to an unknown selected paper")
     evidence = {e.evidence_id: e for e in request.evidence}
     if len(evidence) != len(request.evidence):
         raise ValueError("duplicate evidence IDs")
@@ -49,6 +53,10 @@ def validate_input(request: WriterRequest):
             cited = {evidence[eid].paper_id for claim in connection.claims for eid in claim.evidence_ids}
             if len(connection.claims) < 2 or len(cited) < 2:
                 raise ValueError("conflict requires two claims and two cited papers")
+    for paper_id, future_work in request.paper_future_work.items():
+        for claim in future_work:
+            if any(evidence[eid].paper_id != paper_id for eid in claim.evidence_ids):
+                raise ValueError("Future Work claim cites another paper")
     refs = request.common_references
     if refs.task_id != request.task_id or set(refs.paper_ids) != papers.keys():
         raise ValueError("reference analysis task/selected paper set mismatch")
